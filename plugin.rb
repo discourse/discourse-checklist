@@ -1,6 +1,6 @@
 # name: discourse-plugin-checklist
 # about: Add checklist support to Discourse
-# version: 0.1
+# version: 0.1.1
 # authors: Matthew Wilkin
 # url: https://github.com/cpradio/discourse-plugin-checklist
 
