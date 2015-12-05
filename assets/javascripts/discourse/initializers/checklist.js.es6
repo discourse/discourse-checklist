@@ -39,7 +39,7 @@ export default {
 
         // confirm the feature is enabled by showing the click-ability
         boxes.css({"cursor": "pointer"});
-      }.on('postViewInserted'),
+      }.on('postViewInserted', 'postViewUpdated'),
 
       destroyChecklistUI: function() {
       }.on('willClearRender')

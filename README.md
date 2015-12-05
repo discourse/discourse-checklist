@@ -27,7 +27,6 @@ Follow the directions at [Install a Plugin](https://meta.discourse.org/t/install
 
 ### Limitations:
 
- * While updating one item, you can't update another
  * If you want to make multiple changes it creates multiple versions
  * You can only toggle the default type
 
