@@ -1,6 +1,5 @@
-# NOT READY FOR PRODUCTION USE
-
 # Checklist Plugin
+## Ready for Testers! - It shouldn't break your site, but there may be bugs
 
 Adds simple helpers to build (interactive) checklists, rendering "[]", "[*]" and "[x]" into pretty UI parts you can interact with.
 
