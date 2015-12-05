@@ -23,7 +23,7 @@ Which will be recorded as a new version of the post:
 
 ## Installation
 
-Follow the directions at [Install a Plugin](https://meta.discourse.org/t/install-a-plugin/19157) using https://github.com/cpradio/discourse-plugin-composer-help-button.git as the repository URL.
+Follow the directions at [Install a Plugin](https://meta.discourse.org/t/install-a-plugin/19157) using https://github.com/cpradio/discourse-plugin-checklist.git as the repository URL.
 
 ### Limitations:
 
