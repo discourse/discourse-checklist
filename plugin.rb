@@ -6,7 +6,7 @@
 
 enabled_site_setting :checklist_enabled
 
-register_asset "javascripts/checklist_dialect.js", :server_side
+register_asset "javascripts/discourse/checklist_dialect.js", :server_side
 register_asset "javascripts/discourse/templates/composer-help.hbs"
 
 register_asset 'stylesheets/checklist.scss'
