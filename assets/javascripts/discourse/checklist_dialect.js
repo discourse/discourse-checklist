@@ -1,33 +1,26 @@
 (function() {
   Discourse.Dialect.inlineBetween({
     between: "--",
-    emitter: function(contents){
+    emitter: function(contents) {
       return ["span", {"class": "chcklst-stroked"}].concat(contents);
     }
   });
 
-  Discourse.Dialect.inlineReplace("[ ]", function(text, match, prev){
-    return ["span", {"class": "chcklst-box fa fa-square-o"}];
-  });
+  function replaceChecklist(text) {
+    text = text || "";
+    text = text.replace(/\[\s?\]/ig, '<span class="chcklst-box fa fa-square-o"></span>');
+    text = text.replace(/\[_\]/ig, '<span class="chcklst-box fa fa-square"></span>');
+    text = text.replace(/\[-\]/ig, '<span class="chcklst-box fa fa-minus-square-o"></span>');
+    text = text.replace(/\[x\]/ig, '<span class="chcklst-box fa fa-check-square"></span>');
+    text = text.replace(/\[\*\]/ig, '<span class="chcklst-box fa fa-check-square-o"></span>');
+    return text;
+  }
 
-  Discourse.Dialect.inlineReplace("[]", function(text){
-    return ["span", {"class": "chcklst-box fa fa-square-o"}];
-  });
-
-  Discourse.Dialect.inlineReplace("[_]", function(text, match, prev){
-    return ["span", {"class": "chcklst-box fa fa-square"}];
-  });
-
-  Discourse.Dialect.inlineReplace("[-]", function(text){
-    return ["span", {"class": "chcklst-box fa fa-minus-square-o"}];
-  });
-
-  Discourse.Dialect.inlineReplace("[x]", function(text){
-    return ["span", {"class": "chcklst-box checked fa fa-check-square"}];
-  });
-
-  Discourse.Dialect.inlineReplace("[*]", function(text){
-    return ["span", {"class": "chcklst-box checked fa fa-check-square-o"}];
+  Discourse.Dialect.addPreProcessor(function(text) {
+    if (Discourse.SiteSettings.checklist_enabled) {
+      text = replaceChecklist(text);
+    }
+    return text;
   });
 
   Discourse.Markdown.whiteListTag('span', 'class', 'chcklst-stroked' );
