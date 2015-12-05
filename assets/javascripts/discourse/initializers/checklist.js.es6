@@ -6,33 +6,33 @@ export default {
   initialize: function() {
     PostView.reopen({
       createChecklistUI: function($post) {
-        if (!this.post.can_edit) { return };
+        if (!this.get('post.can_edit')) { return };
 
         var boxes = $post.find(".chcklst-box"),
-                    view = this;
+          viewPost = this.get('post');
 
         boxes.each(function(idx, val) {
           $(val).click(function(ev) {
             var elem = $(ev.currentTarget),
-                       new_value = elem.hasClass("checked") ? "[ ]": "[*]",
-                       poller = Post.load(view.post.get("id"));
+                       new_value = elem.hasClass("checked") ? "[ ]": "[*]";
 
             elem.after('<i class="fa fa-spinner fa-spin"></i>');
             elem.hide();
 
-            poller.then(function(result) {
+            var postId = viewPost.get('id');
+            Discourse.ajax("/posts/" + postId, { type: 'GET', cache: false }).then(function(result) {
               var nth = -1, // make the first run go to index = 0
-                  new_raw = result.raw.replace(/\[([\ \_\-\x\*]?)\]/g, function(match, args, offset) {
-                              nth += 1;
-                              return nth == idx ? new_value : match;
-                            });
-              view.post.setProperties({
+                new_raw = result.raw.replace(/\[([\ \_\-\x\*]?)\]/g, function(match, args, offset) {
+                  nth += 1;
+                  return nth == idx ? new_value : match;
+                });
+
+              var props = {
                 raw: new_raw,
-                editReason: "change checkmark"
-              });
-              view.post.save(function(result) {
-                view.post.updateFromPost(result);
-              });
+                edit_reason: 'checklist change',
+                cooked: Discourse.Markdown.cook(new_raw)
+              };
+              viewPost.save(props);
             });
           });
         });
