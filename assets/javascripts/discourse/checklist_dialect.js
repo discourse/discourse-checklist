@@ -13,6 +13,7 @@
     text = text.replace(/\[-\]/ig, '<span class="chcklst-box fa fa-minus-square-o"></span>');
     text = text.replace(/\[x\]/ig, '<span class="chcklst-box checked fa fa-check-square"></span>');
     text = text.replace(/\[\*\]/ig, '<span class="chcklst-box checked fa fa-check-square-o"></span>');
+    text = text.replace(/!<span class="chcklst-box (checked )?(fa fa-(square-o|square|minus-square-o|check-square|check-square-o))"><\/span>\(/ig, "![](");
     return text;
   }
 
