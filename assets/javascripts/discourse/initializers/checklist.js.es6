@@ -63,15 +63,6 @@ function initializePlugin(api)
   if (siteSettings.checklist_enabled)
   {
     api.decorateCooked(checklistSyntax);
-
-    api.decorateWidget('post-contents:after-cooked', dec => {
-      const post = dec.getModel();
-      console.log(post);
-      console.log(dec);
-
-      if (!post.can_edit) { return };
-
-    });
   }
 }
 
