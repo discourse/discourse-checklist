@@ -68,6 +68,8 @@ function initializePlugin(api)
 
 export default function checklistSyntax($elem, post)
 {
+  if (!post) { return; }
+  
   var boxes = $elem.find(".chcklst-box"),
     viewPost = post.getModel();
 
