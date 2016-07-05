@@ -22,6 +22,11 @@ export function setup(helper) {
       return ["span", {"class": "chcklst-stroked"}].concat(contents);
     }
   });
-  helper.whiteList([ 'span.chcklst-stroked', 'span.chcklst-*' ]);
+  helper.whiteList([ 'span.chcklst-stroked',
+                     'span.chcklst-box fa fa-square-o',
+                     'span.chcklst-box fa fa-square',
+                     'span.chcklst-box fa fa-minus-square-o',
+                     'span.chcklst-box fa fa-check-square',
+                     'span.chcklst-box fa fa-check-square-o' ]);
   helper.addPreProcessor(replaceChecklist);
 }
