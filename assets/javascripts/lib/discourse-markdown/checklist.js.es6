@@ -26,7 +26,7 @@ export function setup(helper) {
                      'span.chcklst-box fa fa-square-o',
                      'span.chcklst-box fa fa-square',
                      'span.chcklst-box fa fa-minus-square-o',
-                     'span.chcklst-box fa fa-check-square',
-                     'span.chcklst-box fa fa-check-square-o' ]);
+                     'span.chcklst-box checked fa fa-check-square',
+                     'span.chcklst-box checked fa fa-check-square-o' ]);
   helper.addPreProcessor(replaceChecklist);
 }
