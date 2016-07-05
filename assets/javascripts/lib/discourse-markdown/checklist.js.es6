@@ -1,7 +1,7 @@
 import { registerOption } from 'pretty-text/pretty-text';
 
 registerOption((siteSettings, opts) => {
-  opts.features['checkist'] = !!siteSettings.checklist_enabled;
+  opts.features['checklist'] = !!siteSettings.checklist_enabled;
 });
 
 function replaceChecklist(text) {
