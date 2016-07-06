@@ -1,5 +1,6 @@
 import { withPluginApi } from 'discourse/lib/plugin-api';
 import AjaxLib from 'discourse/lib/ajax';
+import TextLib from 'discourse/lib/text';
 
 function initializePlugin(api)
 {
@@ -43,7 +44,7 @@ export default function checklistSyntax($elem, post)
         var props = {
           raw: new_raw,
           edit_reason: 'checklist change',
-          cooked: Discourse.Markdown.cook(new_raw)
+          cooked: TextLib.cook(new_raw).string
         };
         viewPost.save(props);
       });
