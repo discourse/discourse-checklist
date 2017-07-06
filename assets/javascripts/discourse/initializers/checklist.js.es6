@@ -12,7 +12,7 @@ function initializePlugin(api)
   }
 }
 
-export default function checklistSyntax($elem, post)
+export function checklistSyntax($elem, post)
 {
   if (!post) { return; }
   
