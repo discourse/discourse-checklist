@@ -1,6 +1,6 @@
 import { withPluginApi } from 'discourse/lib/plugin-api';
 import AjaxLib from 'discourse/lib/ajax';
-import TextLib from 'discourse/lib/text';
+import { cookAsync } from 'discourse/lib/text';
 
 function initializePlugin(api)
 {
@@ -41,12 +41,14 @@ export function checklistSyntax($elem, post)
             return nth == idx ? new_value : match;
           });
 
-        var props = {
+        let props = {
           raw: new_raw,
           edit_reason: 'checklist change',
-          cooked: TextLib.cook(new_raw).string
         };
-        viewPost.save(props);
+        cookAsync(new_raw).then(cooked => {
+          props.cooked = cooked.string;
+          viewPost.save(props);
+        });
       });
     });
   });
