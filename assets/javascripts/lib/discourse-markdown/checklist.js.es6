@@ -21,12 +21,25 @@ function applyStrikethrough(matches, state) {
   return true;
 }
 
-function applyEmptyCheckbox(matches, state) {
+function applyCheckbox(matches, state) {
   let token;
 
   if (matches) {
     token = state.push('span_open', 'span', 1);
-    token.attrs = [['class', 'chcklst-box fa fa-square-o']];
+
+    let checklistClass = 'chcklst-box';
+    if (matches[1].trim().length === 0)
+      checklistClass += ' fa fa-square-o';
+    else if (matches[1] === '_')
+      checklistClass += ' fa fa-square';
+    else if (matches[1] === '-')
+      checklistClass += ' fa fa-minus-square-o';
+    else if (matches[1].toLowerCase() === 'x')
+      checklistClass += ' checked fa fa-check-square';
+    else if (matches[1] === '*')
+      checklistClass += ' checked fa fa-check-square-o';
+
+    token.attrs = [['class', checklistClass]];
     token.block = false;
 
     state.push('span_close', 'span', -1);
@@ -35,61 +48,75 @@ function applyEmptyCheckbox(matches, state) {
   return true;
 }
 
-function applyFilledCheckbox(matches, state) {
-  let token;
+//function applyEmptyCheckbox(matches, state) {
+//  let token;
+//
+//  if (matches) {
+//    token = state.push('span_open', 'span', 1);
+//    token.attrs = [['class', 'chcklst-box fa fa-square-o']];
+//    token.block = false;
+//
+//    state.push('span_close', 'span', -1);
+//  }
+//
+//  return true;
+//}
 
-  if (matches) {
-    token = state.push('span_open', 'span', 1);
-    token.attrs = [['class', 'chcklst-box fa fa-square']];
-    token.block = false;
+//function applyFilledCheckbox(matches, state) {
+//  let token;
+//
+//  if (matches) {
+//    token = state.push('span_open', 'span', 1);
+//    token.attrs = [['class', 'chcklst-box fa fa-square']];
+//    token.block = false;
+//
+//    state.push('span_close', 'span', -1);
+//  }
+//
+//  return true;
+//}
 
-    state.push('span_close', 'span', -1);
-  }
+//function applyMinusCheckbox(matches, state) {
+//  let token;
+//
+//  if (matches) {
+//    token = state.push('span_open', 'span', 1);
+//    token.attrs = [['class', 'chcklst-box fa fa-minus-square-o']];
+//    token.block = false;
+//
+//    state.push('span_close', 'span', -1);
+//  }
+//
+//  return true;
+//}
 
-  return true;
-}
+//function applyInvertedCheckedCheckbox(matches, state) {
+//  let token;
+//
+//  if (matches) {
+//    token = state.push('span_open', 'span', 1);
+//    token.attrs = [['class', 'chcklst-box checked fa fa-check-square']];
+//    token.block = false;
+//
+//    state.push('span_close', 'span', -1);
+//  }
+//
+//  return true;
+//}
 
-function applyMinusCheckbox(matches, state) {
-  let token;
-
-  if (matches) {
-    token = state.push('span_open', 'span', 1);
-    token.attrs = [['class', 'chcklst-box fa fa-minus-square-o']];
-    token.block = false;
-
-    state.push('span_close', 'span', -1);
-  }
-
-  return true;
-}
-
-function applyInvertedCheckedCheckbox(matches, state) {
-  let token;
-
-  if (matches) {
-    token = state.push('span_open', 'span', 1);
-    token.attrs = [['class', 'chcklst-box checked fa fa-check-square']];
-    token.block = false;
-
-    state.push('span_close', 'span', -1);
-  }
-
-  return true;
-}
-
-function applyCheckedCheckbox(matches, state) {
-  let token;
-
-  if (matches) {
-    token = state.push('span_open', 'span', 1);
-    token.attrs = [['class', 'chcklst-box checked fa fa-check-square-o']];
-    token.block = false;
-
-    state.push('span_close', 'span', -1);
-  }
-
-  return true;
-}
+//function applyCheckedCheckbox(matches, state) {
+//  let token;
+//
+//  if (matches) {
+//    token = state.push('span_open', 'span', 1);
+//    token.attrs = [['class', 'chcklst-box checked fa fa-check-square-o']];
+//    token.block = false;
+//
+//    state.push('span_close', 'span', -1);
+//  }
+//
+//  return true;
+//}
 
 export function setup(helper) {
   helper.whiteList([ 's',
@@ -111,33 +138,33 @@ export function setup(helper) {
 
       ruler.push('checklist-empty-checkbox', inlineRegexRule(md, {
         start: '[',
-        matcher: /\[\s?\]/i,
-        emitter: applyEmptyCheckbox
+        matcher: /\[([\s_\-x\*]{0,1})\]/i,
+        emitter: applyCheckbox
       }));
 
-      ruler.push('checklist-filled-checkbox', inlineRegexRule(md, {
-        start: '[',
-        matcher: /\[_\]/i,
-        emitter: applyFilledCheckbox
-      }));
+//      ruler.push('checklist-filled-checkbox', inlineRegexRule(md, {
+//        start: '[',
+//        matcher: /\[_\]/i,
+//        emitter: applyFilledCheckbox
+//      }));
 
-      ruler.push('checklist-minus-checkbox', inlineRegexRule(md, {
-        start: '[',
-        matcher: /\[-\]/i,
-        emitter: applyMinusCheckbox
-      }));
+//      ruler.push('checklist-minus-checkbox', inlineRegexRule(md, {
+//        start: '[',
+//        matcher: /\[-\]/i,
+//        emitter: applyMinusCheckbox
+//      }));
 
-      ruler.push('checklist-inverted-checked-checkbox', inlineRegexRule(md, {
-        start: '[',
-        matcher: /\[x\]/i,
-        emitter: applyInvertedCheckedCheckbox
-      }));
+//      ruler.push('checklist-inverted-checked-checkbox', inlineRegexRule(md, {
+//        start: '[',
+//        matcher: /\[x\]/i,
+//        emitter: applyInvertedCheckedCheckbox
+//      }));
 
-      ruler.push('checklist-checked-checkbox', inlineRegexRule(md, {
-        start: '[',
-        matcher: /\[\*\]/i,
-        emitter: applyCheckedCheckbox
-      }));
+//      ruler.push('checklist-checked-checkbox', inlineRegexRule(md, {
+//        start: '[',
+//        matcher: /\[\*\]/i,
+//        emitter: applyCheckedCheckbox
+//      }));
     });
   }
   else {
