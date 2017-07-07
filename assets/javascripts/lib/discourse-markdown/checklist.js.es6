@@ -48,76 +48,6 @@ function applyCheckbox(matches, state) {
   return true;
 }
 
-//function applyEmptyCheckbox(matches, state) {
-//  let token;
-//
-//  if (matches) {
-//    token = state.push('span_open', 'span', 1);
-//    token.attrs = [['class', 'chcklst-box fa fa-square-o']];
-//    token.block = false;
-//
-//    state.push('span_close', 'span', -1);
-//  }
-//
-//  return true;
-//}
-
-//function applyFilledCheckbox(matches, state) {
-//  let token;
-//
-//  if (matches) {
-//    token = state.push('span_open', 'span', 1);
-//    token.attrs = [['class', 'chcklst-box fa fa-square']];
-//    token.block = false;
-//
-//    state.push('span_close', 'span', -1);
-//  }
-//
-//  return true;
-//}
-
-//function applyMinusCheckbox(matches, state) {
-//  let token;
-//
-//  if (matches) {
-//    token = state.push('span_open', 'span', 1);
-//    token.attrs = [['class', 'chcklst-box fa fa-minus-square-o']];
-//    token.block = false;
-//
-//    state.push('span_close', 'span', -1);
-//  }
-//
-//  return true;
-//}
-
-//function applyInvertedCheckedCheckbox(matches, state) {
-//  let token;
-//
-//  if (matches) {
-//    token = state.push('span_open', 'span', 1);
-//    token.attrs = [['class', 'chcklst-box checked fa fa-check-square']];
-//    token.block = false;
-//
-//    state.push('span_close', 'span', -1);
-//  }
-//
-//  return true;
-//}
-
-//function applyCheckedCheckbox(matches, state) {
-//  let token;
-//
-//  if (matches) {
-//    token = state.push('span_open', 'span', 1);
-//    token.attrs = [['class', 'chcklst-box checked fa fa-check-square-o']];
-//    token.block = false;
-//
-//    state.push('span_close', 'span', -1);
-//  }
-//
-//  return true;
-//}
-
 export function setup(helper) {
   helper.whiteList([ 's',
                      'span.chcklst-box fa fa-square-o',
@@ -141,30 +71,6 @@ export function setup(helper) {
         matcher: /\[([\s_\-x\*]{0,1})\]/i,
         emitter: applyCheckbox
       }));
-
-//      ruler.push('checklist-filled-checkbox', inlineRegexRule(md, {
-//        start: '[',
-//        matcher: /\[_\]/i,
-//        emitter: applyFilledCheckbox
-//      }));
-
-//      ruler.push('checklist-minus-checkbox', inlineRegexRule(md, {
-//        start: '[',
-//        matcher: /\[-\]/i,
-//        emitter: applyMinusCheckbox
-//      }));
-
-//      ruler.push('checklist-inverted-checked-checkbox', inlineRegexRule(md, {
-//        start: '[',
-//        matcher: /\[x\]/i,
-//        emitter: applyInvertedCheckedCheckbox
-//      }));
-
-//      ruler.push('checklist-checked-checkbox', inlineRegexRule(md, {
-//        start: '[',
-//        matcher: /\[\*\]/i,
-//        emitter: applyCheckedCheckbox
-//      }));
     });
   }
   else {
