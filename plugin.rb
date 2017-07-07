@@ -6,5 +6,4 @@
 
 enabled_site_setting :checklist_enabled
 
-#register_asset 'javascripts/lib/discourse-markdown/checklist.js', :server_side
 register_asset 'stylesheets/checklist.scss'
