@@ -26,7 +26,7 @@ export function checklistSyntax($elem, post)
     $(val).click(function(ev)
     {
       var elem = $(ev.currentTarget),
-        new_value = elem.hasClass("checked") ? "[ ]": "[*]";
+        new_value = elem.hasClass("checked") ? "[ ]": "[\\*]";
 
       elem.after('<i class="fa fa-spinner fa-spin"></i>');
       elem.hide();
@@ -35,7 +35,7 @@ export function checklistSyntax($elem, post)
       AjaxLib.ajax("/posts/" + postId, { type: 'GET', cache: false }).then(function(result)
       {
         var nth = -1, // make the first run go to index = 0
-          new_raw = result.raw.replace(/\[([\ \_\-\x\*]?)\]/ig, function(match)
+          new_raw = result.raw.replace(/\[(\s|\_|\-|\x|\\?\*)?\]/ig, function(match)
           {
             nth += 1;
             return nth === idx ? new_value : match;

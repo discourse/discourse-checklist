@@ -9,12 +9,12 @@ describe PrettyText do
 
     it 'can properly bake boxes' do
       md = <<~MD
-        [],[ ],[_];[-]X[x]X [*] are all checkboxes
+        [],[ ],[_];[-]X[x]X [*] [\\*] are all checkboxes
         `[ ]` [x](hello) *[ ]* **[ ]** are not checkboxes
       MD
 
       html = <<~HTML
-        <p><span class="chcklst-box fa fa-square-o"></span>,<span class="chcklst-box fa fa-square-o"></span>,<span class="chcklst-box fa fa-square"></span>;<span class="chcklst-box fa fa-minus-square-o"></span>X<span class="chcklst-box checked fa fa-check-square"></span>X <span class="chcklst-box checked fa fa-check-square-o"></span> are all checkboxes<br>
+        <p><span class="chcklst-box fa fa-square-o"></span>,<span class="chcklst-box fa fa-square-o"></span>,<span class="chcklst-box fa fa-square"></span>;<span class="chcklst-box fa fa-minus-square-o"></span>X<span class="chcklst-box checked fa fa-check-square"></span>X <span class="chcklst-box checked fa fa-check-square-o"></span> <span class="chcklst-box checked fa fa-check-square-o"></span> are all checkboxes<br>
         <code>[ ]</code> <a>x</a> <em>[ ]</em> <strong>[ ]</strong> are not checkboxes</p>
       HTML
       cooked = PrettyText.cook(md)
