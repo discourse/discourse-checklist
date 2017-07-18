@@ -15,7 +15,7 @@ function initializePlugin(api)
 export function checklistSyntax($elem, post)
 {
   if (!post) { return; }
-  
+
   var boxes = $elem.find(".chcklst-box"),
     viewPost = post.getModel();
 
@@ -26,7 +26,7 @@ export function checklistSyntax($elem, post)
     $(val).click(function(ev)
     {
       var elem = $(ev.currentTarget),
-        new_value = elem.hasClass("checked") ? "[ ]": "[*]";
+        new_value = elem.hasClass("checked") ? "[ ]": "[\\*]";
 
       elem.after('<i class="fa fa-spinner fa-spin"></i>');
       elem.hide();
@@ -35,18 +35,27 @@ export function checklistSyntax($elem, post)
       AjaxLib.ajax("/posts/" + postId, { type: 'GET', cache: false }).then(function(result)
       {
         var nth = -1, // make the first run go to index = 0
-          new_raw = result.raw.replace(/\[([\ \_\-\x\*]?)\]/ig, function(match, args, offset)
+          new_raw = result.raw.replace(/\[(\s|\_|\-|\x|\\?\*)?\]/ig, function(match)
           {
             nth += 1;
-            return nth == idx ? new_value : match;
+            return nth === idx ? new_value : match;
           });
 
         var props = {
           raw: new_raw,
           edit_reason: 'checklist change',
-          cooked: TextLib.cook(new_raw).string
         };
-        viewPost.save(props);
+
+        if (TextLib.cookAsync) {
+          TextLib.cookAsync(new_raw).then(cooked => {
+            props.cooked = cooked.string;
+            viewPost.save(props);
+          });
+        } else {
+          props.cooked = TextLib.cook(new_raw).string;
+          viewPost.save(props);
+        }
+
       });
     });
   });
@@ -57,7 +66,7 @@ export function checklistSyntax($elem, post)
 
 export default {
   name: 'checklist',
-  initialize: function(container)
+  initialize: function()
   {
     withPluginApi('0.1', api => initializePlugin(api));
   }
