@@ -1,9 +1,5 @@
 import { registerOption } from 'pretty-text/pretty-text';
 
-registerOption((siteSettings, opts) => {
-  opts.features['checklist'] = !!siteSettings.checklist_enabled;
-});
-
 const REGEX = /\[(\s?|_|-|x|\*)\]/ig;
 
 function getClasses(str) {
@@ -88,18 +84,11 @@ function processChecklist(state) {
 
 }
 
-
-function setupMarkdownIt(helper) {
+export function setup(helper) {
   helper.registerOptions((opts, siteSettings)=>{
     opts.features['checklist'] = !!siteSettings.checklist_enabled;
   });
 
-  helper.registerPlugin(md =>{
-    md.core.ruler.push('checklist', processChecklist);
-  });
-}
-
-export function setup(helper) {
   helper.whiteList([ 'span.chcklst-stroked',
                      'span.chcklst-box fa fa-square-o',
                      'span.chcklst-box fa fa-square',
@@ -107,5 +96,7 @@ export function setup(helper) {
                      'span.chcklst-box checked fa fa-check-square',
                      'span.chcklst-box checked fa fa-check-square-o' ]);
 
-  setupMarkdownIt(helper);
+  helper.registerPlugin(md =>{
+    md.core.ruler.push('checklist', processChecklist);
+  });
 }
