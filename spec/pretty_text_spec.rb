@@ -3,10 +3,6 @@ require 'rails_helper'
 describe PrettyText do
 
   context 'markdown it' do
-    before do
-      SiteSetting.enable_experimental_markdown_it = true
-    end
-
     it 'can properly bake boxes' do
       md = <<~MD
         [],[ ],[_];[-]X[x]X [*] [\\*] are all checkboxes
