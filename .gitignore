@@ -1,2 +1,9 @@
 .idea
 *.iml
+.bundle/
+log/*.log
+pkg/
+auto_generated
+Gemfile.lock
+.DS_Store
+*.swp
