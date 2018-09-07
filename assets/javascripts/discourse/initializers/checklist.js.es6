@@ -28,7 +28,7 @@ export function checklistSyntax($elem, post)
       var elem = $(ev.currentTarget),
         new_value = elem.hasClass("checked") ? "[ ]": "[\\*]";
 
-      elem.after('<i class="fa fa-spinner fa-spin"></i>');
+      elem.after('<i class="fa fa-spinner fa-spin fa-fw"></i>');
       elem.hide();
 
       var postId = viewPost.id;

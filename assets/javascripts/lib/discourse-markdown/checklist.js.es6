@@ -5,15 +5,15 @@ const REGEX = /\[(\s?|_|-|x|\*)\]/ig;
 function getClasses(str) {
   switch(str.toLowerCase()) {
     case "x":
-      return "checked fa fa-check-square";
+      return "checked fa fa-check-square fa-fw";
     case "*":
-      return "checked fa fa-check-square-o";
+      return "checked fa fa-check-square-o fa-fw";
     case "-":
-      return "fa fa-minus-square-o";
+      return "fa fa-minus-square-o fa-fw";
     case "_":
-      return "fa fa-square";
+      return "fa fa-square fa-fw";
     default:
-      return "fa fa-square-o";
+      return "fa fa-square-o fa-fw";
   }
 }
 
@@ -90,11 +90,11 @@ export function setup(helper) {
   });
 
   helper.whiteList([ 'span.chcklst-stroked',
-                     'span.chcklst-box fa fa-square-o',
-                     'span.chcklst-box fa fa-square',
-                     'span.chcklst-box fa fa-minus-square-o',
-                     'span.chcklst-box checked fa fa-check-square',
-                     'span.chcklst-box checked fa fa-check-square-o' ]);
+                     'span.chcklst-box fa fa-square-o fa-fw',
+                     'span.chcklst-box fa fa-square fa-fw',
+                     'span.chcklst-box fa fa-minus-square-o fa-fw',
+                     'span.chcklst-box checked fa fa-check-square fa-fw',
+                     'span.chcklst-box checked fa fa-check-square-o fa-fw' ]);
 
   helper.registerPlugin(md =>{
     md.core.ruler.push('checklist', processChecklist);
