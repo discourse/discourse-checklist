@@ -2,7 +2,7 @@
 # about: Add checklist support to Discourse
 # version: 0.4.1
 # authors: Matthew Wilkin
-# url: https://github.com/cpradio/discourse-plugin-checklist
+# url: https://github.com/discourse/discourse-checklist
 
 enabled_site_setting :checklist_enabled
 
