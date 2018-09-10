@@ -5,6 +5,4 @@
 # To work with us on translations, join this project:
 # https://www.transifex.com/projects/p/discourse-org/
 
-pt:
-  site_settings:
-    checklist_enabled: 'Ativar o plugin de lista de verificação?'
+zh_TW: {}
