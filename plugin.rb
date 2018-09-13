@@ -1,4 +1,4 @@
-# name: discourse-plugin-checklist
+# name: discourse-checklist
 # about: Add checklist support to Discourse
 # version: 0.4.1
 # authors: Matthew Wilkin
