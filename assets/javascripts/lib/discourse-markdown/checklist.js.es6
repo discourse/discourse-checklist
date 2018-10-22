@@ -1,9 +1,9 @@
-import { registerOption } from 'pretty-text/pretty-text';
+import { registerOption } from "pretty-text/pretty-text";
 
-const REGEX = /\[(\s?|_|-|x|\*)\]/ig;
+const REGEX = /\[(\s?|_|-|x|\*)\]/gi;
 
 function getClasses(str) {
-  switch(str.toLowerCase()) {
+  switch (str.toLowerCase()) {
     case "x":
       return "checked fa fa-check-square fa-fw";
     case "*":
@@ -19,25 +19,23 @@ function getClasses(str) {
 
 function addCheckbox(result, content, match, state) {
   let classes = getClasses(match[1]);
-  let token = new state.Token('check_open', 'span', 1);
-  token.attrs = [['class', `chcklst-box ${classes}`]];
+  let token = new state.Token("check_open", "span", 1);
+  token.attrs = [["class", `chcklst-box ${classes}`]];
   result.push(token);
 
-  token = new state.Token('check_close', 'span', -1);
+  token = new state.Token("check_close", "span", -1);
   result.push(token);
 }
 
 function applyCheckboxes(content, state) {
-
   let result = null,
-      pos = 0,
-      match;
+    pos = 0,
+    match;
 
-  while (match = REGEX.exec(content)) {
-
+  while ((match = REGEX.exec(content))) {
     if (match.index > pos) {
       result = result || [];
-      let token = new state.Token('text', '', 0);
+      let token = new state.Token("text", "", 0);
       token.content = content.slice(pos, match.index);
       result.push(token);
     }
@@ -49,7 +47,7 @@ function applyCheckboxes(content, state) {
   }
 
   if (result && pos < content.length) {
-    let token = new state.Token('text', '', 0);
+    let token = new state.Token("text", "", 0);
     token.content = content.slice(pos);
     result.push(token);
   }
@@ -58,12 +56,18 @@ function applyCheckboxes(content, state) {
 }
 
 function processChecklist(state) {
-  var i, j, l, tokens, token,
-      blockTokens = state.tokens,
-      nesting = 0;
+  var i,
+    j,
+    l,
+    tokens,
+    token,
+    blockTokens = state.tokens,
+    nesting = 0;
 
   for (j = 0, l = blockTokens.length; j < l; j++) {
-    if (blockTokens[j].type !== 'inline') { continue; }
+    if (blockTokens[j].type !== "inline") {
+      continue;
+    }
     tokens = blockTokens[j].children;
 
     // We scan from the end, to keep position when new tags are added.
@@ -73,30 +77,35 @@ function processChecklist(state) {
 
       nesting += token.nesting;
 
-      if (token.type === 'text' && nesting === 0) {
+      if (token.type === "text" && nesting === 0) {
         let processed = applyCheckboxes(token.content, state);
         if (processed) {
-          blockTokens[j].children = tokens = state.md.utils.arrayReplaceAt(tokens, i, processed);
+          blockTokens[j].children = tokens = state.md.utils.arrayReplaceAt(
+            tokens,
+            i,
+            processed
+          );
         }
       }
     }
   }
-
 }
 
 export function setup(helper) {
-  helper.registerOptions((opts, siteSettings)=>{
-    opts.features['checklist'] = !!siteSettings.checklist_enabled;
+  helper.registerOptions((opts, siteSettings) => {
+    opts.features["checklist"] = !!siteSettings.checklist_enabled;
   });
 
-  helper.whiteList([ 'span.chcklst-stroked',
-                     'span.chcklst-box fa fa-square-o fa-fw',
-                     'span.chcklst-box fa fa-square fa-fw',
-                     'span.chcklst-box fa fa-minus-square-o fa-fw',
-                     'span.chcklst-box checked fa fa-check-square fa-fw',
-                     'span.chcklst-box checked fa fa-check-square-o fa-fw' ]);
+  helper.whiteList([
+    "span.chcklst-stroked",
+    "span.chcklst-box fa fa-square-o fa-fw",
+    "span.chcklst-box fa fa-square fa-fw",
+    "span.chcklst-box fa fa-minus-square-o fa-fw",
+    "span.chcklst-box checked fa fa-check-square fa-fw",
+    "span.chcklst-box checked fa fa-check-square-o fa-fw"
+  ]);
 
-  helper.registerPlugin(md =>{
-    md.core.ruler.push('checklist', processChecklist);
+  helper.registerPlugin(md => {
+    md.core.ruler.push("checklist", processChecklist);
   });
 }
