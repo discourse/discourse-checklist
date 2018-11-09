@@ -1,6 +1,7 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
 import AjaxLib from "discourse/lib/ajax";
 import TextLib from "discourse/lib/text";
+import { iconHTML } from "discourse-common/lib/icon-library";
 
 function initializePlugin(api) {
   const siteSettings = api.container.lookup("site-settings:main");
@@ -27,7 +28,7 @@ export function checklistSyntax($elem, post) {
       var elem = $(ev.currentTarget),
         new_value = elem.hasClass("checked") ? "[ ]" : "[\\*]";
 
-      elem.after('<i class="fa fa-spinner fa-spin fa-fw"></i>');
+      elem.after(iconHTML("spinner", { class: "fa-spin" }))
       elem.hide();
 
       var postId = viewPost.id;
