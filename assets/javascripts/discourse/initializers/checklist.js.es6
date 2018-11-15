@@ -31,8 +31,8 @@ export function checklistSyntax($elem, post) {
       elem.after(iconHTML("spinner", { class: "fa-spin" }));
       elem.hide();
 
-      var postId = viewPost.id;
-      AjaxLib.ajax("/posts/" + postId, { type: "GET", cache: false }).then(
+      const endpoint = Discourse.getURL(`/posts/${viewPost.id}`);
+      AjaxLib.ajax(endpoint, { type: "GET", cache: false }).then(
         function(result) {
           var nth = -1, // make the first run go to index = 0
             new_raw = result.raw.replace(/\[(\s|\_|\-|\x|\\?\*)?\]/gi, function(
