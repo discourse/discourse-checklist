@@ -50,8 +50,10 @@ span.chcklst-box {
 .fa-spin {
   display: inline-block;
   vertical-align: middle;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.25em;
   animation: fa-spin 2s infinite linear;
+  width: 14px;
+  height: 17px;
 }
 
 @keyframes fa-spin {
