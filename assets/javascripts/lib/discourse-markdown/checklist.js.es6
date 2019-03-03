@@ -18,24 +18,25 @@ function getClasses(str) {
 }
 
 function addCheckbox(result, content, match, state) {
-  let classes = getClasses(match[1]);
-  let token = new state.Token("check_open", "span", 1);
-  token.attrs = [["class", `chcklst-box ${classes}`]];
-  result.push(token);
+  const classes = getClasses(match[1]);
 
-  token = new state.Token("check_close", "span", -1);
-  result.push(token);
+  const checkOpenToken = new state.Token("check_open", "span", 1);
+  checkOpenToken.attrs = [["class", `chcklst-box ${classes}`]];
+  result.push(checkOpenToken);
+
+  const checkCloseToken = new state.Token("check_close", "span", -1);
+  result.push(checkCloseToken);
 }
 
 function applyCheckboxes(content, state) {
-  let result = null,
-    pos = 0,
-    match;
+  let match;
+  let result = null;
+  let pos = 0;
 
   while ((match = REGEX.exec(content))) {
     if (match.index > pos) {
       result = result || [];
-      let token = new state.Token("text", "", 0);
+      const token = new state.Token("text", "", 0);
       token.content = content.slice(pos, match.index);
       result.push(token);
     }
@@ -47,7 +48,7 @@ function applyCheckboxes(content, state) {
   }
 
   if (result && pos < content.length) {
-    let token = new state.Token("text", "", 0);
+    const token = new state.Token("text", "", 0);
     token.content = content.slice(pos);
     result.push(token);
   }
@@ -78,7 +79,7 @@ function processChecklist(state) {
       nesting += token.nesting;
 
       if (token.type === "text" && nesting === 0) {
-        let processed = applyCheckboxes(token.content, state);
+        const processed = applyCheckboxes(token.content, state);
         if (processed) {
           blockTokens[j].children = tokens = state.md.utils.arrayReplaceAt(
             tokens,
@@ -105,7 +106,7 @@ export function setup(helper) {
     "span.chcklst-box checked fa fa-check-square-o fa-fw"
   ]);
 
-  helper.registerPlugin(md => {
-    md.core.ruler.push("checklist", processChecklist);
-  });
+  helper.registerPlugin(md =>
+    md.core.ruler.push("checklist", processChecklist)
+  );
 }

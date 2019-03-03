@@ -16,53 +16,52 @@ export function checklistSyntax($elem, post) {
     return;
   }
 
-  var boxes = $elem.find(".chcklst-box"),
-    viewPost = post.getModel();
+  const $boxes = $elem.find(".chcklst-box");
+  const postModel = post.getModel();
 
-  if (!viewPost.can_edit) {
+  if (!postModel.can_edit) {
     return;
   }
 
-  boxes.each(function(idx, val) {
-    $(val).click(function(ev) {
-      var elem = $(ev.currentTarget),
-        new_value = elem.hasClass("checked") ? "[ ]" : "[\\*]";
+  $boxes.each((idx, val) => {
+    $(val).click(ev => {
+      const $box = $(ev.currentTarget);
+      const newValue = $box.hasClass("checked") ? "[ ]" : "[\\*]";
 
-      elem.after(iconHTML("spinner", { class: "fa-spin" }));
-      elem.hide();
+      $box.after(iconHTML("spinner", { class: "fa-spin" })).hide();
 
-      const endpoint = Discourse.getURL(`/posts/${viewPost.id}`);
-      AjaxLib.ajax(endpoint, { type: "GET", cache: false }).then(
-        function(result) {
-          var nth = -1, // make the first run go to index = 0
-            new_raw = result.raw.replace(/\[(\s|\_|\-|\x|\\?\*)?\]/gi, function(
-              match
-            ) {
-              nth += 1;
-              return nth === idx ? new_value : match;
-            });
-
-          var props = {
-            raw: new_raw,
-            edit_reason: I18n.t("checklist.edit_reason")
-          };
-
-          if (TextLib.cookAsync) {
-            TextLib.cookAsync(new_raw).then(cooked => {
-              props.cooked = cooked.string;
-              viewPost.save(props);
-            });
-          } else {
-            props.cooked = TextLib.cook(new_raw).string;
-            viewPost.save(props);
+      const endpoint = Discourse.getURL(`/posts/${postModel.id}`);
+      AjaxLib.ajax(endpoint, { type: "GET", cache: false }).then(result => {
+        // make the first run go to index = 0
+        let nth = -1;
+        const newRaw = result.raw.replace(
+          /\[(\s|\_|\-|\x|\\?\*)?\]/gi,
+          match => {
+            nth += 1;
+            return nth === idx ? newValue : match;
           }
+        );
+
+        const props = {
+          raw: newRaw,
+          edit_reason: I18n.t("checklist.edit_reason")
+        };
+
+        if (TextLib.cookAsync) {
+          TextLib.cookAsync(newRaw).then(cooked => {
+            props.cooked = cooked.string;
+            postModel.save(props);
+          });
+        } else {
+          props.cooked = TextLib.cook(newRaw).string;
+          postModel.save(props);
         }
-      );
+      });
     });
   });
 
   // confirm the feature is enabled by showing the click-ability
-  boxes.css({ cursor: "pointer" });
+  $boxes.css({ cursor: "pointer" });
 }
 
 export default {
