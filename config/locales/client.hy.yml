@@ -5,7 +5,7 @@
 # To work with us on translations, join this project:
 # https://www.transifex.com/projects/p/discourse-org/
 
-pt_BR:
+hy:
   js:
     checklist:
-      edit_reason: "mudança da checklist"
+      edit_reason: "Ստուգման ցանկի փոփոխություն"
