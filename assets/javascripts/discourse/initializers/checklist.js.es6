@@ -38,8 +38,8 @@ export function checklistSyntax($elem, post) {
           // code blocks).
           [
             /`[^`\n]*\n?[^`\n]*`/gm,
-            /^```.*?^```/gms,
-            /\[code\].*?\[\/code\]/gms
+            /^```[^]*?^```/gm,
+            /\[code\][^]*?\[\/code\]/gm
           ].forEach(regex => {
             let match;
             while ((match = regex.exec(result.raw)) != null) {

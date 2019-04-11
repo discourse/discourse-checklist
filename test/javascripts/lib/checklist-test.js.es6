@@ -8,6 +8,15 @@ QUnit.test("correct checkbox is selected", assert => {
 
 It seems that a code block followed by a checklist breaks things.
 
+\`[x]\`
+
+[code]
+[\*]
+[ ]
+[ ]
+[\*]
+[/code]
+
 \`\`\`
 [\*]
 [ ]
@@ -25,6 +34,12 @@ Clicking the boxes will ruin the code block and the list becomes unresponsive.`;
   const cooked = `<div class="cooked">
 <p>Hi there,</p>
 <p>It seems that a code block followed by a checklist breaks things.</p>
+<pre>[*]</pre>
+<pre><code>[\*]
+[ ]
+[ ]
+[\*]
+</code></pre>
 <pre><code>[\*]
 [ ]
 [ ]
