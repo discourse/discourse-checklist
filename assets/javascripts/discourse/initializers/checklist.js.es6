@@ -1,6 +1,6 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
-import AjaxLib from "discourse/lib/ajax";
-import TextLib from "discourse/lib/text";
+import { ajax } from "discourse/lib/ajax";
+import { cookAsync } from "discourse/lib/text";
 import { iconHTML } from "discourse-common/lib/icon-library";
 
 function initializePlugin(api) {
@@ -30,33 +30,42 @@ export function checklistSyntax($elem, post) {
 
       $box.after(iconHTML("spinner", { class: "fa-spin" })).hide();
 
-      const endpoint = Discourse.getURL(`/posts/${postModel.id}`);
-      AjaxLib.ajax(endpoint, { type: "GET", cache: false }).then(result => {
-        // make the first run go to index = 0
-        let nth = -1;
-        const newRaw = result.raw.replace(
-          /\[(\s|\_|\-|\x|\\?\*)?\]/gi,
-          match => {
-            nth += 1;
-            return nth === idx ? newValue : match;
-          }
-        );
+      ajax(`/posts/${postModel.id}`, { type: "GET", cache: false }).then(
+        result => {
+          const blocks = [];
 
-        const props = {
-          raw: newRaw,
-          edit_reason: I18n.t("checklist.edit_reason")
-        };
-
-        if (TextLib.cookAsync) {
-          TextLib.cookAsync(newRaw).then(cooked => {
-            props.cooked = cooked.string;
-            postModel.save(props);
+          // Computing offsets where checkbox are not evaluated (i.e. inside
+          // code blocks).
+          [
+            /`[^`\n]*\n?[^`\n]*`/gm,
+            /^```.*?^```/gms,
+            /\[code\].*?\[\/code\]/gms
+          ].forEach(regex => {
+            let match;
+            while ((match = regex.exec(result.raw)) != null) {
+              blocks.push([match.index, match.index + match[0].length]);
+            }
           });
-        } else {
-          props.cooked = TextLib.cook(newRaw).string;
-          postModel.save(props);
+
+          // make the first run go to index = 0
+          let nth = -1;
+          const newRaw = result.raw.replace(
+            /\[(\s|\_|\-|\x|\\?\*)?\]/gi,
+            (match, ignored, off) => {
+              nth += blocks.every(b => b[0] > off + match.length || off > b[1]);
+              return nth === idx ? newValue : match;
+            }
+          );
+
+          cookAsync(newRaw).then(cooked =>
+            postModel.save({
+              cooked: cooked.string,
+              raw: newRaw,
+              edit_reason: I18n.t("checklist.edit_reason")
+            })
+          );
         }
-      });
+      );
     });
   });
 
