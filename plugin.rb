@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # name: discourse-checklist
 # about: Add checklist support to Discourse
 # version: 0.4.1
