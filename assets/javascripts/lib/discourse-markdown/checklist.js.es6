@@ -1,5 +1,3 @@
-import { registerOption } from "pretty-text/pretty-text";
-
 const REGEX = /\[(\s?|_|-|x|\*)\]/gi;
 
 function getClasses(str) {
