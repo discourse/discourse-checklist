@@ -5,6 +5,4 @@
 # To work with us on translations, join this project:
 # https://www.transifex.com/projects/p/discourse-org/
 
-pl_PL:
-  site_settings:
-    checklist_enabled: 'Włączyć wtyczkę checklist?'
+be: {}
