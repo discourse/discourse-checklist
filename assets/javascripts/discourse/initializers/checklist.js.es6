@@ -39,7 +39,10 @@ export function checklistSyntax($elem, post) {
           [
             /`[^`\n]*\n?[^`\n]*`/gm,
             /^```[^]*?^```/gm,
-            /\[code\][^]*?\[\/code\]/gm
+            /\[code\][^]*?\[\/code\]/gm,
+            /_.*?_/gm,
+            /\*.*?\*/gm,
+            /~~.*?~~/gm,
           ].forEach(regex => {
             let match;
             while ((match = regex.exec(result.raw)) != null) {
@@ -49,11 +52,22 @@ export function checklistSyntax($elem, post) {
 
           // make the first run go to index = 0
           let nth = -1;
+          let found = false;
           const newRaw = result.raw.replace(
             /\[(\s|\_|\-|\x|\\?\*)?\]/gi,
             (match, ignored, off) => {
+              if (found) {
+                return match;
+              }
+
               nth += blocks.every(b => b[0] > off + match.length || off > b[1]);
-              return nth === idx ? newValue : match;
+
+              if (nth === idx) {
+                found = true; // Do not replace any further matches
+                return newValue;
+              }
+
+              return match;
             }
           );
 
