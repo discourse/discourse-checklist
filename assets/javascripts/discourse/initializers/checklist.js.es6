@@ -42,7 +42,7 @@ export function checklistSyntax($elem, post) {
             /\[code\][^]*?\[\/code\]/gm,
             /_.*?_/gm,
             /\*.*?\*/gm,
-            /~~.*?~~/gm,
+            /~~.*?~~/gm
           ].forEach(regex => {
             let match;
             while ((match = regex.exec(result.raw)) != null) {
