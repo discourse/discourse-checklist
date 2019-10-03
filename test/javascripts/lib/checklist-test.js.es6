@@ -3,7 +3,88 @@ import { checklistSyntax } from "discourse/plugins/discourse-checklist/discourse
 
 QUnit.module("initializer:checklist");
 
+QUnit.test("checkbox before a code block", assert => {
+  const raw = `
+[ ] first
+[*] actual
+\`[x] nope\`
+  `;
 
+  const cooked = `<div class="cooked">
+<p><span class="chcklst-box fa fa-square-o fa-fw" style="cursor: pointer;"></span> first<br>
+<span class="chcklst-box checked fa fa-check-square-o fa-fw" style="cursor: pointer;"></span> actual</p>
+<pre>[x] nope</pre>
+</div>
+  `;
+
+  const model = Post.create({ id: 42, can_edit: true });
+  const decoratorHelper = { getModel: () => model };
+  const $elem = $(cooked);
+
+  // eslint-disable-next-line no-undef
+  server.get("/posts/42", () => [
+    200,
+    { "Content-Type": "application/json" },
+    { raw: raw }
+  ]);
+
+  checklistSyntax($elem, decoratorHelper);
+
+  const done = assert.async();
+  model.save = fields => {
+    assert.ok(fields.raw.includes("[ ] first"));
+    assert.ok(fields.raw.includes("[ ] actual"));
+    assert.ok(fields.raw.includes("[x] nope"));
+
+    done();
+  };
+
+  $elem.find(".chcklst-box:nth(1)").click();
+});
+
+QUnit.test("checkbox before a multiline code block", assert => {
+  const raw = `
+[ ] first
+[*] actual
+\`\`\`
+[x] nope
+[x] neither
+\`\`\`
+  `;
+
+  const cooked = `<div class="cooked">
+<p><span class="chcklst-box fa fa-square-o fa-fw" style="cursor: pointer;"></span> first<br>
+<span class="chcklst-box checked fa fa-check-square-o fa-fw" style="cursor: pointer;"></span> actual</p>
+<pre><code>[x]
+[x]
+</code></pre>
+</div>
+  `;
+
+  const model = Post.create({ id: 42, can_edit: true });
+  const decoratorHelper = { getModel: () => model };
+  const $elem = $(cooked);
+
+  // eslint-disable-next-line no-undef
+  server.get("/posts/42", () => [
+    200,
+    { "Content-Type": "application/json" },
+    { raw: raw }
+  ]);
+
+  checklistSyntax($elem, decoratorHelper);
+
+  const done = assert.async();
+  model.save = fields => {
+    assert.ok(fields.raw.includes("[ ] first"));
+    assert.ok(fields.raw.includes("[ ] actual"));
+    assert.ok(fields.raw.includes("[x] nope"));
+
+    done();
+  };
+
+  $elem.find(".chcklst-box:nth(1)").click();
+});
 
 QUnit.test("correct checkbox is selected", assert => {
   const raw = `
