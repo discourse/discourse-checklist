@@ -1,18 +1,11 @@
-import { cook } from "discourse/lib/text";
+import { cookAsync } from "discourse/lib/text";
 import Post from "discourse/models/post";
 import { checklistSyntax } from "discourse/plugins/discourse-checklist/discourse/initializers/checklist";
 
 QUnit.module("initializer:checklist");
 
-QUnit.test("checkbox before a code block", assert => {
-  const raw = `
-[ ] first
-[*] actual
-\`[x] nope\`
-  `;
-
-  const cooked = cook(raw, { siteSettings: { checklist_enabled: true } });
-  const $elem = $(cooked.string);
+async function prepare(raw) {
+  const cooked = await cookAsync(raw, { siteSettings: { checklist_enabled: true } });
   const model = Post.create({ id: 42, can_edit: true });
   const decoratorHelper = { getModel: () => model };
 
@@ -23,56 +16,51 @@ QUnit.test("checkbox before a code block", assert => {
     { raw }
   ]);
 
+  const $elem = $(cooked.string);
   checklistSyntax($elem, decoratorHelper);
 
-  const done = assert.async();
-  model.save = fields => {
-    assert.ok(fields.raw.includes("[ ] first"));
-    assert.ok(fields.raw.includes("[ ] actual"));
-    assert.ok(fields.raw.includes("[x] nope"));
-    done();
-  };
+  const updated = new Promise(resolve => {
+    model.save = fields => resolve(fields.raw);
+  });
+
+  return [$elem, updated];
+}
+
+QUnit.test("checkbox before a code block", async assert => {
+  const [$elem, updated] = await prepare(`
+[ ] first
+[*] actual
+\`[x] nope\`
+  `);
 
   $elem.find(".chcklst-box:nth(1)").click();
+
+  const output = await updated;
+  assert.ok(output.includes("[ ] first"));
+  assert.ok(output.includes("[ ] actual"));
+  assert.ok(output.includes("[x] nope"));
 });
 
-QUnit.test("checkbox before a multiline code block", assert => {
-  const raw = `
+QUnit.test("checkbox before a multiline code block", async assert => {
+  const [$elem, updated] = await prepare(`
 [ ] first
 [*] actual
 \`\`\`
 [x] nope
 [x] neither
 \`\`\`
-  `;
-
-  const cooked = cook(raw, { siteSettings: { checklist_enabled: true } });
-  const $elem = $(cooked.string);
-  const model = Post.create({ id: 42, can_edit: true });
-  const decoratorHelper = { getModel: () => model };
-
-  // eslint-disable-next-line no-undef
-  server.get("/posts/42", () => [
-    200,
-    { "Content-Type": "application/json" },
-    { raw }
-  ]);
-
-  checklistSyntax($elem, decoratorHelper);
-
-  const done = assert.async();
-  model.save = fields => {
-    assert.ok(fields.raw.includes("[ ] first"));
-    assert.ok(fields.raw.includes("[ ] actual"));
-    assert.ok(fields.raw.includes("[x] nope"));
-    done();
-  };
+  `);
 
   $elem.find(".chcklst-box:nth(1)").click();
+
+  const output = await updated;
+  assert.ok(output.includes("[ ] first"));
+  assert.ok(output.includes("[ ] actual"));
+  assert.ok(output.includes("[x] nope"));
 });
 
-QUnit.test("correct checkbox is selected", assert => {
-  const raw = `
+QUnit.test("correct checkbox is selected", async assert => {
+  const [$elem, updated] = await prepare(`
 \`[x]\`
 *[x]*
 **[x]**
@@ -99,27 +87,10 @@ Actual checkboxes:
 [*] second
 [x] third
 [_] fourth
-`;
-
-  const cooked = cook(raw, { siteSettings: { checklist_enabled: true } });
-  const $elem = $(cooked.string);
-  const model = Post.create({ id: 42, can_edit: true });
-  const decoratorHelper = { getModel: () => model };
-
-  // eslint-disable-next-line no-undef
-  server.get("/posts/42", () => [
-    200,
-    { "Content-Type": "application/json" },
-    { raw }
-  ]);
-
-  checklistSyntax($elem, decoratorHelper);
-
-  const done = assert.async();
-  model.save = fields => {
-    assert.ok(fields.raw.includes("[ ] third"));
-    done();
-  };
+  `);
 
   $elem.find(".chcklst-box:nth(2)").click();
+
+  const output = await updated;
+  assert.ok(output.includes("[ ] third"));
 });
