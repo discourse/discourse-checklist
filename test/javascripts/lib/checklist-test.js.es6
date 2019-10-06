@@ -59,6 +59,17 @@ QUnit.test("checkbox before a multiline code block", async assert => {
   assert.ok(output.includes("[x] nope"));
 });
 
+QUnit.test("checkbox before italic/bold sequence", async assert => {
+  const [$elem, updated] = await prepare(`
+[*] *test*
+  `);
+
+  $elem.find(".chcklst-box:nth(0)").click();
+
+  const output = await updated;
+  assert.ok(output.includes("[ ] *test*"));
+});
+
 QUnit.test("correct checkbox is selected", async assert => {
   const [$elem, updated] = await prepare(`
 \`[x]\`
