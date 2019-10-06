@@ -5,7 +5,9 @@ import { checklistSyntax } from "discourse/plugins/discourse-checklist/discourse
 QUnit.module("initializer:checklist");
 
 async function prepare(raw) {
-  const cooked = await cookAsync(raw, { siteSettings: { checklist_enabled: true } });
+  const cooked = await cookAsync(raw, {
+    siteSettings: { checklist_enabled: true }
+  });
   const model = Post.create({ id: 42, can_edit: true });
   const decoratorHelper = { getModel: () => model };
 
