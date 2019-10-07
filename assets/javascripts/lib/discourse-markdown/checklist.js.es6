@@ -1,4 +1,4 @@
-const REGEX = /\[(\s?|_|-|x|\*)\]/gi;
+export const REGEX = /\[(\s?|_|-|x|\*)\]/gi;
 
 function getClasses(str) {
   switch (str.toLowerCase()) {
@@ -19,7 +19,10 @@ function addCheckbox(result, content, match, state) {
   const classes = getClasses(match[1]);
 
   const checkOpenToken = new state.Token("check_open", "span", 1);
-  checkOpenToken.attrs = [["class", `chcklst-box ${classes}`]];
+  checkOpenToken.attrs = [
+    ["class", `chcklst-box ${classes}`],
+    ["data-text-index", match.index]
+  ];
   result.push(checkOpenToken);
 
   const checkCloseToken = new state.Token("check_close", "span", -1);

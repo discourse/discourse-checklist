@@ -2,6 +2,7 @@ import { withPluginApi } from "discourse/lib/plugin-api";
 import { ajax } from "discourse/lib/ajax";
 import { cookAsync } from "discourse/lib/text";
 import { iconHTML } from "discourse-common/lib/icon-library";
+import { REGEX } from "../../lib/discourse-markdown/checklist";
 
 function initializePlugin(api) {
   const siteSettings = api.container.lookup("site-settings:main");
@@ -23,63 +24,28 @@ export function checklistSyntax($elem, post) {
     return;
   }
 
-  $boxes.each((idx, val) => {
+  $boxes.each((_, val) => {
     $(val).click(ev => {
-      const $box = $(ev.currentTarget);
-      const newValue = $box.hasClass("checked") ? "[ ]" : "[\\*]";
+      const box = ev.currentTarget;
+      const newValue = box.classList.contains("checked") ? "[ ]" : "[\\*]";
+      const index = box.getAttribute('data-text-index');
 
-      $box.after(iconHTML("spinner", { class: "fa-spin" })).hide();
+      $(box).after(iconHTML("spinner", { class: "fa-spin" })).hide();
 
-      ajax(`/posts/${postModel.id}`, { type: "GET", cache: false }).then(
-        result => {
-          const blocks = [];
+      ajax(`/posts/${postModel.id}`, { type: "GET", cache: false }).then(({ raw }) => {
+        const newRaw =
+          raw.substr(0, index) +
+          raw.substr(index, 3).replace(REGEX, () => newValue) +
+          raw.substr(index + 3);
 
-          // Computing offsets where checkbox are not evaluated (i.e. inside
-          // code blocks).
-          [
-            /`[^`\n]*\n?[^`\n]*`/gm,
-            /^```[^]*?^```/gm,
-            /\[code\][^]*?\[\/code\]/gm,
-            /_.*?_/gm,
-            /\*[^\]].*?[^\[]\*/gm,
-            /~~.*?~~/gm
-          ].forEach(regex => {
-            let match;
-            while ((match = regex.exec(result.raw)) != null) {
-              blocks.push([match.index, match.index + match[0].length]);
-            }
-          });
-
-          // make the first run go to index = 0
-          let nth = -1;
-          let found = false;
-          const newRaw = result.raw.replace(
-            /\[(\s|\_|\-|\x|\\?\*)?\]/gi,
-            (match, ignored, off) => {
-              if (found) {
-                return match;
-              }
-
-              nth += blocks.every(b => b[0] > off + match.length || off > b[1]);
-
-              if (nth === idx) {
-                found = true; // Do not replace any further matches
-                return newValue;
-              }
-
-              return match;
-            }
-          );
-
-          cookAsync(newRaw).then(cooked =>
-            postModel.save({
-              cooked: cooked.string,
-              raw: newRaw,
-              edit_reason: I18n.t("checklist.edit_reason")
-            })
-          );
-        }
-      );
+        cookAsync(newRaw).then(cooked =>
+          postModel.save({
+            cooked: cooked.string,
+            raw: newRaw,
+            edit_reason: I18n.t("checklist.edit_reason")
+          })
+        );
+      });
     });
   });
 
