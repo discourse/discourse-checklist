@@ -73,6 +73,46 @@ QUnit.test("checkbox before italic/bold sequence", async assert => {
   assert.ok(output.includes("[ ] *test*"));
 });
 
+QUnit.test("checkboxes in an unordered list", async assert => {
+  const [$elem, updated] = await prepare(`
+* [*] checked
+* [] test
+* [] two
+`);
+
+  $elem.find(".chcklst-box:nth(1)").click();
+
+  const output = await updated;
+  assert.ok(output.includes("* [*] checked"));
+  assert.ok(output.includes("* [\\*] test"));
+  assert.ok(output.includes("* [] two"));
+});
+
+QUnit.test("checkboxes in italic/bold-like blocks", async assert => {
+  const [$elem, updated] = await prepare(`
+*[\*
+*a [*] \*]*
+[*\*]
+~~[*]~~
+
+* []* 0
+
+~~[] ~~ 1
+
+~~ [*]~~ 2
+
+* [*] 3
+`);
+
+// Doesn't work properly:
+// *[\*] * 4
+
+  $elem.find(".chcklst-box:nth(3)").click();
+
+  const output = await updated;
+  assert.ok(output.includes("* [] 3"));
+});
+
 QUnit.test("correct checkbox is selected", async assert => {
   const [$elem, updated] = await prepare(`
 \`[x]\`
