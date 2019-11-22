@@ -1,6 +1,7 @@
 import { cookAsync } from "discourse/lib/text";
 import Post from "discourse/models/post";
 import { checklistSyntax } from "discourse/plugins/discourse-checklist/discourse/initializers/checklist";
+import { Promise } from "rsvp";
 
 QUnit.module("initializer:checklist");
 
