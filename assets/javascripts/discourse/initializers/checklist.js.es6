@@ -37,11 +37,17 @@ export function checklistSyntax($elem, post) {
           // Computing offsets where checkbox are not evaluated (i.e. inside
           // code blocks).
           [
+            // inline code
             /`[^`\n]*\n?[^`\n]*`/gm,
+            // multi-line code
             /^```[^]*?^```/gm,
+            // bbcode
             /\[code\][^]*?\[\/code\]/gm,
+            // italic/bold
             /_(?=[^\s]).*?[^\s]_/gm,
+            // italic/bold
             /\*(?=[^\]\s\[]).*?[^\[\s\\]\*/gm,
+            // strikethrough
             /~~(?=[^\s]).*?[^\s]~~/gm
           ].forEach(regex => {
             let match;
