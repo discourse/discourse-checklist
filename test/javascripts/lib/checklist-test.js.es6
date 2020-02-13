@@ -115,7 +115,7 @@ QUnit.test("checkboxes in italic/bold-like blocks", async assert => {
   $elem.find(".chcklst-box")[3].click();
 
   const output = await updated;
-  assert.ok(output.includes("* [] 3"));
+  assert.ok(output.includes("* [ ] 3"));
 });
 
 QUnit.test("correct checkbox is selected", async assert => {
