@@ -36,6 +36,7 @@ QUnit.test("checkbox before a code block", async assert => {
 \`[x] nope\`
   `);
 
+  assert.equal($elem.find(".chcklst-box").length, 2);
   $elem.find(".chcklst-box")[1].click();
 
   const output = await updated;
@@ -54,6 +55,7 @@ QUnit.test("checkbox before a multiline code block", async assert => {
 \`\`\`
   `);
 
+  assert.equal($elem.find(".chcklst-box").length, 2);
   $elem.find(".chcklst-box")[1].click();
 
   const output = await updated;
@@ -67,6 +69,7 @@ QUnit.test("checkbox before italic/bold sequence", async assert => {
 [*] *test*
   `);
 
+  assert.equal($elem.find(".chcklst-box").length, 1);
   $elem.find(".chcklst-box")[0].click();
 
   const output = await updated;
@@ -80,6 +83,7 @@ QUnit.test("checkboxes in an unordered list", async assert => {
 * [] two
 `);
 
+  assert.equal($elem.find(".chcklst-box").length, 3);
   $elem.find(".chcklst-box")[1].click();
 
   const output = await updated;
@@ -107,6 +111,7 @@ QUnit.test("checkboxes in italic/bold-like blocks", async assert => {
 // Doesn't work properly:
 // *[\*] * 4
 
+  assert.equal($elem.find(".chcklst-box").length, 4);
   $elem.find(".chcklst-box")[3].click();
 
   const output = await updated;
@@ -143,6 +148,7 @@ Actual checkboxes:
 [_] fourth
   `);
 
+  assert.equal($elem.find(".chcklst-box").length, 4);
   $elem.find(".chcklst-box")[2].click();
 
   const output = await updated;
