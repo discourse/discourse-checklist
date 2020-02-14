@@ -66,7 +66,7 @@ export function checklistSyntax($elem, post) {
                 return match;
               }
 
-              nth += blocks.every(b => b[0] > off + match.length || off > b[1]);
+              nth += blocks.every(b => b[0] >= off + match.length || off > b[1]);
 
               if (nth === idx) {
                 found = true; // Do not replace any further matches

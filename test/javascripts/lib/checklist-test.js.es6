@@ -144,13 +144,14 @@ __[x]__
 Actual checkboxes:
 [] first
 [*] second
-[x] third
-[_] fourth
+* test[*]*thrid*
+[x] fourth
+[_] fifth
   `);
 
-  assert.equal($elem.find(".chcklst-box").length, 4);
-  $elem.find(".chcklst-box")[2].click();
+  assert.equal($elem.find(".chcklst-box").length, 5);
+  $elem.find(".chcklst-box")[3].click();
 
   const output = await updated;
-  assert.ok(output.includes("[ ] third"));
+  assert.ok(output.includes("[ ] fourth"));
 });
