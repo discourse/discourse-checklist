@@ -44,9 +44,9 @@ export function checklistSyntax($elem, post) {
             // bbcode
             /\[code\][^]*?\[\/code\]/gm,
             // italic/bold
-            /_(?=[^\s]).*?[^\s]_/gm,
+            /_(?=\S).*?\S_/gm,
             // strikethrough
-            /~~(?=[^\s]).*?[^\s]~~/gm
+            /~~(?=\S).*?\S~~/gm
           ].forEach(regex => {
             let match;
             while ((match = regex.exec(result.raw)) != null) {
