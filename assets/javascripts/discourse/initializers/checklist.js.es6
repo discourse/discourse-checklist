@@ -45,14 +45,23 @@ export function checklistSyntax($elem, post) {
             /\[code\][^]*?\[\/code\]/gm,
             // italic/bold
             /_(?=[^\s]).*?[^\s]_/gm,
-            // italic/bold
-            /\*(?=[^\]\s\[]).*?[^\[\s\\]\*/gm,
             // strikethrough
             /~~(?=[^\s]).*?[^\s]~~/gm
           ].forEach(regex => {
             let match;
             while ((match = regex.exec(result.raw)) != null) {
               blocks.push([match.index, match.index + match[0].length]);
+            }
+          });
+
+          [
+            // italic/bold
+            /([^\[\n]|^)\*\S.+?\S\*(?=[^\]\n]|$)/gm,
+          ].forEach(regex => {
+            let match;
+            while ((match = regex.exec(result.raw)) != null) {
+              // Simulate lookbehind - skip the first character
+              blocks.push([match.index + 1, match.index + match[0].length]);
             }
           });
 
