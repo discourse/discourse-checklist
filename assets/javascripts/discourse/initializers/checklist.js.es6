@@ -56,7 +56,7 @@ export function checklistSyntax($elem, post) {
 
           [
             // italic/bold
-            /([^\[\n]|^)\*\S.+?\S\*(?=[^\]\n]|$)/gm,
+            /([^\[\n]|^)\*\S.+?\S\*(?=[^\]\n]|$)/gm
           ].forEach(regex => {
             let match;
             while ((match = regex.exec(result.raw)) != null) {
@@ -75,7 +75,9 @@ export function checklistSyntax($elem, post) {
                 return match;
               }
 
-              nth += blocks.every(b => b[0] >= off + match.length || off > b[1]);
+              nth += blocks.every(
+                b => b[0] >= off + match.length || off > b[1]
+              );
 
               if (nth === idx) {
                 found = true; // Do not replace any further matches
