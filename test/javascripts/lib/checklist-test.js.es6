@@ -108,9 +108,6 @@ QUnit.test("checkboxes in italic/bold-like blocks", async assert => {
 * [*] 3
 `);
 
-  // Doesn't work properly:
-  // *[\*] * 4
-
   assert.equal($elem.find(".chcklst-box").length, 4);
   $elem.find(".chcklst-box")[3].click();
 
