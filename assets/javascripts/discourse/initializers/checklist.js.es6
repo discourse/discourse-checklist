@@ -37,16 +37,31 @@ export function checklistSyntax($elem, post) {
           // Computing offsets where checkbox are not evaluated (i.e. inside
           // code blocks).
           [
+            // inline code
             /`[^`\n]*\n?[^`\n]*`/gm,
+            // multi-line code
             /^```[^]*?^```/gm,
+            // bbcode
             /\[code\][^]*?\[\/code\]/gm,
-            /_.*?_/gm,
-            /\*[^\]].*?[^\[]\*/gm,
-            /~~.*?~~/gm
+            // italic/bold
+            /_(?=\S).*?\S_/gm,
+            // strikethrough
+            /~~(?=\S).*?\S~~/gm
           ].forEach(regex => {
             let match;
             while ((match = regex.exec(result.raw)) != null) {
               blocks.push([match.index, match.index + match[0].length]);
+            }
+          });
+
+          [
+            // italic/bold
+            /([^\[\n]|^)\*\S.+?\S\*(?=[^\]\n]|$)/gm
+          ].forEach(regex => {
+            let match;
+            while ((match = regex.exec(result.raw)) != null) {
+              // Simulate lookbehind - skip the first character
+              blocks.push([match.index + 1, match.index + match[0].length]);
             }
           });
 
@@ -60,7 +75,9 @@ export function checklistSyntax($elem, post) {
                 return match;
               }
 
-              nth += blocks.every(b => b[0] > off + match.length || off > b[1]);
+              nth += blocks.every(
+                b => b[0] >= off + match.length || off > b[1]
+              );
 
               if (nth === idx) {
                 found = true; // Do not replace any further matches
