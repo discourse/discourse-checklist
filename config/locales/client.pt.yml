@@ -8,4 +8,4 @@
 pt:
   js:
     checklist:
-      edit_reason: "mudança de lista de verificação"
+      edit_reason: "alteração da lista de verificação"
