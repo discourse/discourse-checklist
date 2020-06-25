@@ -153,7 +153,7 @@ QUnit.test("checkboxes in an unordered list", async assert => {
 
   const output = await updated;
   assert.ok(output.includes("* [*] checked"));
-  assert.ok(output.includes("* [\\*] test"));
+  assert.ok(output.includes("* [*] test"));
   assert.ok(output.includes("* [] two"));
 });
 
