@@ -17,16 +17,16 @@ function getClasses(str) {
 
 function rangesToReject(delimiters) {
   return delimiters
-    .filter((delimiter) => delimiter.end !== -1) // Ignore endless ranges
+    .filter(delimiter => delimiter.end !== -1) // Ignore endless ranges
     .filter(
-      (delimiter) =>
+      delimiter =>
         delimiter.marker === 0x5f /* _ */ ||
         delimiter.marker === 0x2a /* * */ ||
         delimiter.marker === 0x7e /* ~ */
     )
-    .map((delimiter) => [
+    .map(delimiter => [
       delimiter.token, // Start of the range
-      delimiters[delimiter.end].token, // End of the range
+      delimiters[delimiter.end].token // End of the range
     ]);
 }
 
@@ -112,7 +112,7 @@ export function setup(helper) {
     "span.chcklst-box checked fa fa-check-square-o fa-fw"
   ]);
 
-  helper.registerPlugin((md) => {
+  helper.registerPlugin(md => {
     md.inline.ruler.before("text", "checklist", processChecklist);
     md.inline.ruler2.before("text_collapse", "checklist", postProcessChecklist);
   });

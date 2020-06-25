@@ -35,7 +35,7 @@ Simple test:
 [] one
   `;
   const cooked = await cookAsync(raw, {
-    siteSettings: { checklist_enabled: true },
+    siteSettings: { checklist_enabled: true }
   });
 
   assert.equal(
@@ -49,7 +49,7 @@ QUnit.test("rendering a checkbox after a square bracket", async assert => {
 [[]
   `;
   const cooked = await cookAsync(raw, {
-    siteSettings: { checklist_enabled: true },
+    siteSettings: { checklist_enabled: true }
   });
 
   assert.equal(
@@ -114,7 +114,7 @@ QUnit.test("checkbox after a multiline code block", async assert => {
 });
 
 QUnit.test("consecutive * checkboxes", async assert => {
-  const [$elem, ] = await prepare(`
+  const [$elem] = await prepare(`
 \`\`\`
 [*] hello1
 [*] hello2

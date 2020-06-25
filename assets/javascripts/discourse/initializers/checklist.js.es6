@@ -8,7 +8,7 @@ const GLOBAL_REGEX = new RegExp(REGEX, "g");
 const SPINNER = [
   '<span class="chcklst-spinner">',
   iconHTML("spinner", { class: "fa-spin" }),
-  "</span>",
+  "</span>"
 ].join("");
 
 function initializePlugin(api) {
