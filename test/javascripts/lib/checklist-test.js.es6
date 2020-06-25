@@ -29,6 +29,35 @@ async function prepare(raw) {
   return [$elem, updated];
 }
 
+QUnit.test("rendering a checkbox after a newline", async assert => {
+  const raw = `
+Simple test:
+[] one
+  `;
+  const cooked = await cookAsync(raw, {
+    siteSettings: { checklist_enabled: true },
+  });
+
+  assert.equal(
+    cooked.string,
+    '<p>Simple test:<br>\n<span class="chcklst-box fa fa-square-o fa-fw"></span> one</p>'
+  );
+});
+
+QUnit.test("rendering a checkbox after a square bracket", async assert => {
+  const raw = `
+[[]
+  `;
+  const cooked = await cookAsync(raw, {
+    siteSettings: { checklist_enabled: true },
+  });
+
+  assert.equal(
+    cooked.string,
+    '<p>[<span class="chcklst-box fa fa-square-o fa-fw"></span></p>'
+  );
+});
+
 QUnit.test("checkbox before a code block", async assert => {
   const [$elem, updated] = await prepare(`
 [ ] first
@@ -130,9 +159,9 @@ QUnit.test("checkboxes in an unordered list", async assert => {
 
 QUnit.test("checkboxes in italic/bold-like blocks", async assert => {
   const [$elem, updated] = await prepare(`
-*[\*
-*a [*] \*]*
-[*\*]
+*[\\*
+*a [*] \\*]*
+[*\\*]
 ~~[*]~~
 
 * []* 0
@@ -161,23 +190,23 @@ __[x]__
 ~~[x]~~
 
 [code]
-[\*]
+[\\*]
 [ ]
 [ ]
-[\*]
+[\\*]
 [/code]
 
 \`\`\`
-[\*]
+[\\*]
 [ ]
 [ ]
-[\*]
+[\\*]
 \`\`\`
 
 Actual checkboxes:
 [] first
 [*] second
-* test[*]*thrid*
+* test[*]*third*
 [x] fourth
 [_] fifth
   `);
