@@ -1,4 +1,4 @@
-const REGEX = /\[\\?(\s?|_|-|x|\*)\]/i;
+export const REGEX = /\[\\?(\s?|_|-|x|\*)\]/i;
 
 function getClasses(str) {
   switch (str.toLowerCase()) {

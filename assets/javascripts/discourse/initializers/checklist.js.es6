@@ -2,6 +2,9 @@ import { withPluginApi } from "discourse/lib/plugin-api";
 import { ajax } from "discourse/lib/ajax";
 import { cookAsync } from "discourse/lib/text";
 import { iconHTML } from "discourse-common/lib/icon-library";
+import { REGEX } from "../../lib/discourse-markdown/checklist";
+
+const GLOBAL_REGEX = new RegExp(REGEX, "g");
 
 function initializePlugin(api) {
   const siteSettings = api.container.lookup("site-settings:main");
@@ -69,7 +72,7 @@ export function checklistSyntax($elem, post) {
           let nth = -1;
           let found = false;
           const newRaw = result.raw.replace(
-            /\[(\s|\_|\-|\x|\\?\*)?\]/gi,
+            GLOBAL_REGEX,
             (match, ignored, off) => {
               if (found) {
                 return match;

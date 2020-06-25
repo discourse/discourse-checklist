@@ -217,3 +217,15 @@ Actual checkboxes:
   const output = await updated;
   assert.ok(output.includes("[ ] fourth"));
 });
+
+QUnit.test("toggling an escaped checkbox", async assert => {
+  const [$elem, updated] = await prepare(`
+[\\x] escaped
+  `);
+
+  assert.equal($elem.find(".chcklst-box").length, 1);
+  $elem.find(".chcklst-box")[0].click();
+
+  const output = await updated;
+  assert.equal(output.trim(), "[ ] escaped");
+});
