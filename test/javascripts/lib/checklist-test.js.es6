@@ -64,6 +64,42 @@ QUnit.test("checkbox before a multiline code block", async assert => {
   assert.ok(output.includes("[x] nope"));
 });
 
+QUnit.test("checkbox after a multiline code block", async assert => {
+  const [$elem, updated] = await prepare(`
+\`\`\`
+[*] nope
+[ ] neither
+\`\`\`
+[*] actual
+[ ] second
+  `);
+
+  assert.equal($elem.find(".chcklst-box").length, 2);
+  $elem.find(".chcklst-box")[0].click();
+
+  const output = await updated;
+
+  assert.ok(output.includes("[*] nope"));
+  assert.ok(output.includes("[ ] actual"));
+  assert.ok(output.includes("[ ] second"));
+});
+
+QUnit.test("consecutive * checkboxes", async assert => {
+  const [$elem, ] = await prepare(`
+\`\`\`
+[*] hello1
+[*] hello2
+[*] hello3
+\`\`\`
+
+[*] hello4
+[*] hello5
+[*] hello6
+`);
+
+  assert.equal($elem.find(".chcklst-box").length, 3);
+});
+
 QUnit.test("checkbox before italic/bold sequence", async assert => {
   const [$elem, updated] = await prepare(`
 [*] *test*
