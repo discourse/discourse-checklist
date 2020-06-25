@@ -5,6 +5,11 @@ import { iconHTML } from "discourse-common/lib/icon-library";
 import { REGEX } from "../../lib/discourse-markdown/checklist";
 
 const GLOBAL_REGEX = new RegExp(REGEX, "g");
+const SPINNER = [
+  '<span class="chcklst-spinner">',
+  iconHTML("spinner", { class: "fa-spin" }),
+  "</span>",
+].join("");
 
 function initializePlugin(api) {
   const siteSettings = api.container.lookup("site-settings:main");
@@ -31,7 +36,7 @@ export function checklistSyntax($elem, post) {
       const $box = $(ev.currentTarget);
       const newValue = $box.hasClass("checked") ? "[ ]" : "[*]";
 
-      $box.after(iconHTML("spinner", { class: "fa-spin" })).hide();
+      $box.after(SPINNER).hide();
 
       ajax(`/posts/${postModel.id}`, { type: "GET", cache: false }).then(
         result => {
