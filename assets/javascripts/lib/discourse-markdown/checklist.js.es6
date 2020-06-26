@@ -30,16 +30,6 @@ function rangesToReject(delimiters) {
     ]);
 }
 
-function inAnyRange(i, ranges) {
-  for (const [start, end] of ranges) {
-    if (i > start && i < end) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
 function postProcessChecklist(state) {
   let ranges = rangesToReject(state.delimiters);
 
@@ -59,7 +49,7 @@ function postProcessChecklist(state) {
       return;
     }
 
-    if (inAnyRange(i, ranges)) {
+    if (ranges.some(([start, end]) => i > start && i < end)) {
       const textToken = new state.Token("text", "", 0);
       textToken.content = token.content;
       textToken.level = token.level;
