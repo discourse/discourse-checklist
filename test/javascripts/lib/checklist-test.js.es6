@@ -229,3 +229,19 @@ QUnit.test("toggling an escaped checkbox", async assert => {
   const output = await updated;
   assert.equal(output.trim(), "[ ] escaped");
 });
+
+QUnit.test("the link syntax is not treated as a checkbox", async assert => {
+  const [$elem, updated] = await prepare(`
+[x](nope)
+[x]( this one's fine!
+[x]hey
+  `);
+
+  assert.equal($elem.find(".chcklst-box").length, 2);
+  $elem.find(".chcklst-box")[1].click();
+
+  const output = await updated;
+  assert.ok(output.includes("[x](nope)"));
+  assert.ok(output.includes("[x]( this"));
+  assert.ok(output.includes("[ ]hey"));
+});

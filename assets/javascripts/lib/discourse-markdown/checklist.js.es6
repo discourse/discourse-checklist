@@ -103,7 +103,7 @@ export function setup(helper) {
   ]);
 
   helper.registerPlugin(md => {
-    md.inline.ruler.before("text", "checklist", processChecklist);
+    md.inline.ruler.push("checklist", processChecklist);
     md.inline.ruler2.before("text_collapse", "checklist", postProcessChecklist);
   });
 }

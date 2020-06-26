@@ -54,7 +54,9 @@ export function checklistSyntax($elem, post) {
             // italic/bold
             /_(?=\S).*?\S_/gm,
             // strikethrough
-            /~~(?=\S).*?\S~~/gm
+            /~~(?=\S).*?\S~~/gm,
+            // link
+            new RegExp(`${REGEX.source}\\(\\s*.*\\s*\\)`, "gm")
           ].forEach(regex => {
             let match;
             while ((match = regex.exec(result.raw)) != null) {
