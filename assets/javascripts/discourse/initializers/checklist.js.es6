@@ -1,6 +1,5 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
 import { ajax } from "discourse/lib/ajax";
-import { cookAsync } from "discourse/lib/text";
 import { iconHTML } from "discourse-common/lib/icon-library";
 
 function initializePlugin(api) {
@@ -11,13 +10,14 @@ function initializePlugin(api) {
   }
 }
 
-export function checklistSyntax($elem, post) {
-  if (!post) {
+export function checklistSyntax($elem, postDecorator) {
+  if (!postDecorator) {
     return;
   }
 
   const $boxes = $elem.find(".chcklst-box");
-  const postModel = post.getModel();
+  const postWidget = postDecorator.widget;
+  const postModel = postDecorator.getModel();
 
   if (!postModel.can_edit) {
     return;
@@ -88,13 +88,15 @@ export function checklistSyntax($elem, post) {
             }
           );
 
-          cookAsync(newRaw).then(cooked =>
-            postModel.save({
-              cooked: cooked.string,
+          postModel
+            .save({
               raw: newRaw,
               edit_reason: I18n.t("checklist.edit_reason")
             })
-          );
+            .then(() => {
+              postWidget.attrs.isSaving = false;
+              postWidget.scheduleRerender();
+            });
         }
       );
     });
