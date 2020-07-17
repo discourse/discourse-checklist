@@ -88,15 +88,17 @@ export function checklistSyntax($elem, postDecorator) {
             }
           );
 
-          postModel
-            .save({
-              raw: newRaw,
-              edit_reason: I18n.t("checklist.edit_reason")
-            })
-            .then(() => {
+          const save = postModel.save({
+            raw: newRaw,
+            edit_reason: I18n.t("checklist.edit_reason")
+          })
+
+          if (save) {
+            save.then(() => {
               postWidget.attrs.isSaving = false;
               postWidget.scheduleRerender();
             });
+          }
         }
       );
     });

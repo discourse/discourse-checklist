@@ -25,7 +25,6 @@ async function prepare(raw) {
   const updated = new Promise(resolve => {
     model.save = fields => resolve(fields.raw);
   });
-
   return [$elem, updated];
 }
 
