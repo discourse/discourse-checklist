@@ -91,7 +91,7 @@ export function checklistSyntax($elem, postDecorator) {
           const save = postModel.save({
             raw: newRaw,
             edit_reason: I18n.t("checklist.edit_reason")
-          })
+          });
 
           if (save && save.then) {
             save.then(() => {
