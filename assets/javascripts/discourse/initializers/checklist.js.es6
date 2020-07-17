@@ -93,7 +93,7 @@ export function checklistSyntax($elem, postDecorator) {
             edit_reason: I18n.t("checklist.edit_reason")
           })
 
-          if (save) {
+          if (save && save.then) {
             save.then(() => {
               postWidget.attrs.isSaving = false;
               postWidget.scheduleRerender();
