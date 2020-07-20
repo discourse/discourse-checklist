@@ -80,8 +80,7 @@ QUnit.test("checkbox before a multiline code block", async assert => {
 });
 
 QUnit.test("checkbox before italic/bold sequence", async assert => {
-  const [$elem, updated] = await prepare(`
-[x] *test*
+  const [$elem, updated] = await prepare(` [x] *test*
   `);
 
   assert.equal($elem.find(".chcklst-box").length, 1);
@@ -109,14 +108,18 @@ QUnit.test("checkboxes in an unordered list", async assert => {
 
 QUnit.test("checkboxes in italic/bold-like blocks", async assert => {
   const [$elem, updated] = await prepare(`
-~~[x]~~
-*[x] hello*
+*[x
+*a [*] x]*
 [*x]
+~~[*]~~
 
 * []* 0
-~~ [] ~~ 1
+
+~~[] ~~ 1
+
 ~~ [x]~~ 2
-* [X] 3
+
+* [x] 3
 `);
 
   assert.equal($elem.find(".chcklst-box").length, 4);
