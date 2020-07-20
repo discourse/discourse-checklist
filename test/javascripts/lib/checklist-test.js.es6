@@ -32,7 +32,7 @@ async function prepare(raw) {
 QUnit.test("checkbox before a code block", async assert => {
   const [$elem, updated] = await prepare(`
 [ ] first
-[*] actual
+[x] actual
 \`[x] nope\`
   `);
 
@@ -45,10 +45,25 @@ QUnit.test("checkbox before a code block", async assert => {
   assert.ok(output.includes("[x] nope"));
 });
 
+QUnit.test("permanently checked checkbox", async assert => {
+  const [$elem, updated] = await prepare(`
+[X] perma
+[x] not perma
+  `);
+
+  assert.equal($elem.find(".chcklst-box").length, 2);
+  $elem.find(".chcklst-box")[0].click();
+  $elem.find(".chcklst-box")[1].click();
+
+  const output = await updated;
+  assert.ok(output.includes("[X] perma"));
+  assert.ok(output.includes("[ ] not perma"));
+});
+
 QUnit.test("checkbox before a multiline code block", async assert => {
   const [$elem, updated] = await prepare(`
 [ ] first
-[*] actual
+[x] actual
 \`\`\`
 [x] nope
 [x] neither
@@ -66,7 +81,7 @@ QUnit.test("checkbox before a multiline code block", async assert => {
 
 QUnit.test("checkbox before italic/bold sequence", async assert => {
   const [$elem, updated] = await prepare(`
-[*] *test*
+[x] *test*
   `);
 
   assert.equal($elem.find(".chcklst-box").length, 1);
@@ -78,7 +93,7 @@ QUnit.test("checkbox before italic/bold sequence", async assert => {
 
 QUnit.test("checkboxes in an unordered list", async assert => {
   const [$elem, updated] = await prepare(`
-* [*] checked
+* [x] checked
 * [] test
 * [] two
 `);
@@ -87,25 +102,21 @@ QUnit.test("checkboxes in an unordered list", async assert => {
   $elem.find(".chcklst-box")[1].click();
 
   const output = await updated;
-  assert.ok(output.includes("* [*] checked"));
-  assert.ok(output.includes("* [\\*] test"));
+  assert.ok(output.includes("* [x] checked"));
+  assert.ok(output.includes("* [x] test"));
   assert.ok(output.includes("* [] two"));
 });
 
 QUnit.test("checkboxes in italic/bold-like blocks", async assert => {
   const [$elem, updated] = await prepare(`
-*[\*
-*a [*] \*]*
-[*\*]
-~~[*]~~
+~~[x]~~
+*[x] hello*
+[*x]
 
 * []* 0
-
-~~[] ~~ 1
-
-~~ [*]~~ 2
-
-* [*] 3
+~~ [] ~~ 1
+~~ [x]~~ 2
+* [X] 3
 `);
 
   assert.equal($elem.find(".chcklst-box").length, 4);
@@ -125,25 +136,25 @@ __[x]__
 ~~[x]~~
 
 [code]
-[\*]
+[x]
 [ ]
 [ ]
-[\*]
+[x]
 [/code]
 
 \`\`\`
-[\*]
+[x]
 [ ]
 [ ]
-[\*]
+[x]
 \`\`\`
 
 Actual checkboxes:
 [] first
-[*] second
-* test[*]*thrid*
+[x] second
+* test[x]*thrid*
 [x] fourth
-[_] fifth
+[x] fifth
   `);
 
   assert.equal($elem.find(".chcklst-box").length, 5);

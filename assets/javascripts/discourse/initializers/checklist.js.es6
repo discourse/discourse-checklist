@@ -26,7 +26,10 @@ export function checklistSyntax($elem, postDecorator) {
   $boxes.each((idx, val) => {
     $(val).click(ev => {
       const $box = $(ev.currentTarget);
-      const newValue = $box.hasClass("checked") ? "[ ]" : "[\\*]";
+
+      if ($box.hasClass("permanent")) return;
+
+      const newValue = $box.hasClass("checked") ? "[ ]" : "[x]";
 
       $box.after(iconHTML("spinner", { class: "fa-spin" })).hide();
 
