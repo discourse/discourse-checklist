@@ -17,12 +17,12 @@ describe ChecklistSyntaxMigrator do
   end
 
   it "replaces instances of the old checkbox instance, with the new syntax" do
-    body = "[-] 1\n[_] 2\n[*] 3\n[\\*] 4\n[\*] 5\n[*\] 6"
+    body = "[-] 1\n[_] 2\n[*] 3\n[\\*] 4"
     post = post_with_body(body)
 
     ChecklistSyntaxMigrator.new(post).update_syntax!
 
-    expected = "[x] 1\n[x] 2\n[x] 3\n[x] 4\n[x] 5\n[x] 6"
+    expected = "[x] 1\n[x] 2\n[x] 3\n[x] 4"
     expect(post.reload.raw).to eq(expected)
   end
 
@@ -60,6 +60,5 @@ describe ChecklistSyntaxMigrator do
 
     expected = "[x] 0 spaces\n [x] 1 space\n  [x] 2 spaces\n   [x] 3 spaces\n    [-] 4 spaces"
     expect(post.reload.raw).to eq(expected)
-
   end
 end
