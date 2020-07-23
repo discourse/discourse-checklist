@@ -1,15 +1,11 @@
-const REGEX = /\[(\s?|_|-|x|\*)\]/gi;
+const REGEX = /\[(\s?|x|X)\]/g;
 
 function getClasses(str) {
-  switch (str.toLowerCase()) {
+  switch (str) {
     case "x":
-      return "checked fa fa-check-square fa-fw";
-    case "*":
       return "checked fa fa-check-square-o fa-fw";
-    case "-":
-      return "fa fa-minus-square-o fa-fw";
-    case "_":
-      return "fa fa-square fa-fw";
+    case "X":
+      return "checked permanent fa fa-check-square fa-fw";
     default:
       return "fa fa-square-o fa-fw";
   }
@@ -98,10 +94,8 @@ export function setup(helper) {
   helper.whiteList([
     "span.chcklst-stroked",
     "span.chcklst-box fa fa-square-o fa-fw",
-    "span.chcklst-box fa fa-square fa-fw",
-    "span.chcklst-box fa fa-minus-square-o fa-fw",
-    "span.chcklst-box checked fa fa-check-square fa-fw",
-    "span.chcklst-box checked fa fa-check-square-o fa-fw"
+    "span.chcklst-box checked fa fa-check-square-o fa-fw",
+    "span.chcklst-box checked permanent fa fa-check-square fa-fw"
   ]);
 
   helper.registerPlugin(md =>
