@@ -3,7 +3,7 @@
 class ChecklistSyntaxMigrator
   CHECKBOX_REGEX = /^( {0,3})\[(_|-|\*|\\\*)\]/
   CODE_BLOCK_REGEX = /^ {0,3}```/
-  QUOTE_START_REGEX = /^ {0,3}\[quote\=/
+  QUOTE_START_REGEX = /^ {0,3}\[quote/
   QUOTE_END_REGEX = /^ {0,3}\[\/quote\]/
 
   def initialize(post)
