@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 desc "Convert old style checkbox markdown to new style"
 task 'discourse_checklist:migrate_old_syntax' => :environment do |t|
   puts "Updating checklist syntax on all posts..."
@@ -8,5 +10,3 @@ task 'discourse_checklist:migrate_old_syntax' => :environment do |t|
 
   puts "", "Done!"
 end
-
-
