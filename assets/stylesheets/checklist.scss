@@ -4,9 +4,20 @@ span.chcklst-stroked {
 
 @mixin checklist-svg-icon($svg) {
   &:before {
-    content: svg-uri(
-      '<svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="14px" height="16px" viewBox="0 0 448 512"><path fill="#{$primary}" d="#{$svg}"></path></svg>'
-    );
+    background-color: var(--primary, $primary);
+    content: "";
+    -webkit-mask: svg-uri(
+        '<svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="14px" height="16px" viewBox="0 0 448 512"><path d="#{$svg}"></path></svg>'
+      )
+      no-repeat 50% 50%;
+    mask: svg-uri(
+        '<svg aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" width="14px" height="16px" viewBox="0 0 448 512"><path d="#{$svg}"></path></svg>'
+      )
+      no-repeat 50% 50%;
+    -webkit-mask-size: cover;
+    mask-size: cover;
+    width: 1em;
+    height: 1em;
   }
 }
 
