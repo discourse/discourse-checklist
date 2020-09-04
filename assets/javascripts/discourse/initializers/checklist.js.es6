@@ -1,6 +1,7 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
 import { ajax } from "discourse/lib/ajax";
 import { iconHTML } from "discourse-common/lib/icon-library";
+import I18n from "I18n";
 
 function initializePlugin(api) {
   const siteSettings = api.container.lookup("site-settings:main");
@@ -24,7 +25,7 @@ export function checklistSyntax($elem, postDecorator) {
   }
 
   $boxes.each((idx, val) => {
-    $(val).click(ev => {
+    $(val).click((ev) => {
       const $box = $(ev.currentTarget);
 
       if ($box.hasClass("permanent")) return;
@@ -34,7 +35,7 @@ export function checklistSyntax($elem, postDecorator) {
       $box.after(iconHTML("spinner", { class: "fa-spin" })).hide();
 
       ajax(`/posts/${postModel.id}`, { type: "GET", cache: false }).then(
-        result => {
+        (result) => {
           const blocks = [];
 
           // Computing offsets where checkbox are not evaluated (i.e. inside
@@ -49,8 +50,8 @@ export function checklistSyntax($elem, postDecorator) {
             // italic/bold
             /_(?=\S).*?\S_/gm,
             // strikethrough
-            /~~(?=\S).*?\S~~/gm
-          ].forEach(regex => {
+            /~~(?=\S).*?\S~~/gm,
+          ].forEach((regex) => {
             let match;
             while ((match = regex.exec(result.raw)) != null) {
               blocks.push([match.index, match.index + match[0].length]);
@@ -59,8 +60,8 @@ export function checklistSyntax($elem, postDecorator) {
 
           [
             // italic/bold
-            /([^\[\n]|^)\*\S.+?\S\*(?=[^\]\n]|$)/gm
-          ].forEach(regex => {
+            /([^\[\n]|^)\*\S.+?\S\*(?=[^\]\n]|$)/gm,
+          ].forEach((regex) => {
             let match;
             while ((match = regex.exec(result.raw)) != null) {
               // Simulate lookbehind - skip the first character
@@ -79,7 +80,7 @@ export function checklistSyntax($elem, postDecorator) {
               }
 
               nth += blocks.every(
-                b => b[0] >= off + match.length || off > b[1]
+                (b) => b[0] >= off + match.length || off > b[1]
               );
 
               if (nth === idx) {
@@ -93,7 +94,7 @@ export function checklistSyntax($elem, postDecorator) {
 
           const save = postModel.save({
             raw: newRaw,
-            edit_reason: I18n.t("checklist.edit_reason")
+            edit_reason: I18n.t("checklist.edit_reason"),
           });
 
           if (save && save.then) {
@@ -113,7 +114,7 @@ export function checklistSyntax($elem, postDecorator) {
 
 export default {
   name: "checklist",
-  initialize: function() {
-    withPluginApi("0.1", api => initializePlugin(api));
-  }
+  initialize: function () {
+    withPluginApi("0.1", (api) => initializePlugin(api));
+  },
 };

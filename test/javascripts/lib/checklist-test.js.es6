@@ -7,7 +7,7 @@ QUnit.module("initializer:checklist");
 
 async function prepare(raw) {
   const cooked = await cookAsync(raw, {
-    siteSettings: { checklist_enabled: true }
+    siteSettings: { checklist_enabled: true },
   });
   const model = Post.create({ id: 42, can_edit: true });
   const decoratorHelper = { getModel: () => model };
@@ -16,20 +16,20 @@ async function prepare(raw) {
   server.get("/posts/42", () => [
     200,
     { "Content-Type": "application/json" },
-    { raw }
+    { raw },
   ]);
 
   const $elem = $(cooked.string);
   checklistSyntax($elem, decoratorHelper);
 
-  const updated = new Promise(resolve => {
-    model.save = fields => resolve(fields.raw);
+  const updated = new Promise((resolve) => {
+    model.save = (fields) => resolve(fields.raw);
   });
 
   return [$elem, updated];
 }
 
-QUnit.test("checkbox before a code block", async assert => {
+QUnit.test("checkbox before a code block", async (assert) => {
   const [$elem, updated] = await prepare(`
 [ ] first
 [x] actual
@@ -45,7 +45,7 @@ QUnit.test("checkbox before a code block", async assert => {
   assert.ok(output.includes("[x] nope"));
 });
 
-QUnit.test("permanently checked checkbox", async assert => {
+QUnit.test("permanently checked checkbox", async (assert) => {
   const [$elem, updated] = await prepare(`
 [X] perma
 [x] not perma
@@ -60,7 +60,7 @@ QUnit.test("permanently checked checkbox", async assert => {
   assert.ok(output.includes("[ ] not perma"));
 });
 
-QUnit.test("checkbox before a multiline code block", async assert => {
+QUnit.test("checkbox before a multiline code block", async (assert) => {
   const [$elem, updated] = await prepare(`
 [ ] first
 [x] actual
@@ -79,7 +79,7 @@ QUnit.test("checkbox before a multiline code block", async assert => {
   assert.ok(output.includes("[x] nope"));
 });
 
-QUnit.test("checkbox before italic/bold sequence", async assert => {
+QUnit.test("checkbox before italic/bold sequence", async (assert) => {
   const [$elem, updated] = await prepare(` [x] *test*
   `);
 
@@ -90,7 +90,7 @@ QUnit.test("checkbox before italic/bold sequence", async assert => {
   assert.ok(output.includes("[ ] *test*"));
 });
 
-QUnit.test("checkboxes in an unordered list", async assert => {
+QUnit.test("checkboxes in an unordered list", async (assert) => {
   const [$elem, updated] = await prepare(`
 * [x] checked
 * [] test
@@ -106,7 +106,7 @@ QUnit.test("checkboxes in an unordered list", async assert => {
   assert.ok(output.includes("* [] two"));
 });
 
-QUnit.test("checkboxes in italic/bold-like blocks", async assert => {
+QUnit.test("checkboxes in italic/bold-like blocks", async (assert) => {
   const [$elem, updated] = await prepare(`
 *[x
 *a [*] x]*
@@ -129,7 +129,7 @@ QUnit.test("checkboxes in italic/bold-like blocks", async assert => {
   assert.ok(output.includes("* [ ] 3"));
 });
 
-QUnit.test("correct checkbox is selected", async assert => {
+QUnit.test("correct checkbox is selected", async (assert) => {
   const [$elem, updated] = await prepare(`
 \`[x]\`
 *[x]*
