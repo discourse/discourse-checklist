@@ -95,10 +95,10 @@ export function setup(helper) {
     "span.chcklst-stroked",
     "span.chcklst-box fa fa-square-o fa-fw",
     "span.chcklst-box checked fa fa-check-square-o fa-fw",
-    "span.chcklst-box checked permanent fa fa-check-square fa-fw"
+    "span.chcklst-box checked permanent fa fa-check-square fa-fw",
   ]);
 
-  helper.registerPlugin(md =>
+  helper.registerPlugin((md) =>
     md.core.ruler.push("checklist", processChecklist)
   );
 }
