@@ -28,7 +28,9 @@ export function checklistSyntax($elem, postDecorator) {
     $(val).click((ev) => {
       const $box = $(ev.currentTarget);
 
-      if ($box.hasClass("permanent")) return;
+      if ($box.hasClass("permanent")) {
+        return;
+      }
 
       const newValue = $box.hasClass("checked") ? "[ ]" : "[x]";
 
