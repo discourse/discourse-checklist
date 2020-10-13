@@ -51,7 +51,7 @@ function applyCheckboxes(content, state) {
 }
 
 function processChecklist(state) {
-  let i,
+  var i,
     j,
     l,
     tokens,
