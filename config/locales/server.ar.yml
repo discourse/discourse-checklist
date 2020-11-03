@@ -4,4 +4,6 @@
 # To work with us on translations, join this project:
 # https://translate.discourse.org/
 
-ar: 
+ar:
+  site_settings:
+    checklist_enabled: 'هل تريد تمكين المكون الإضافي لقائمة التحقق؟'
