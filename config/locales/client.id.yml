@@ -4,4 +4,7 @@
 # To work with us on translations, join this project:
 # https://translate.discourse.org/
 
-id: 
+id:
+  js:
+    checklist:
+      edit_reason: "checklist change"
