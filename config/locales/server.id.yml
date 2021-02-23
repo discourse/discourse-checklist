@@ -5,3 +5,5 @@
 # https://translate.discourse.org/
 
 id:
+  site_settings:
+    checklist_enabled: 'Aktifkan plugin checklist?'
