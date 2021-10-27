@@ -91,7 +91,7 @@ export function setup(helper) {
     opts.features["checklist"] = !!siteSettings.checklist_enabled;
   });
 
-  helper.whiteList([
+  helper.allowList([
     "span.chcklst-stroked",
     "span.chcklst-box fa fa-square-o fa-fw",
     "span.chcklst-box checked fa fa-check-square-o fa-fw",
