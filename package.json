@@ -1,4 +1,7 @@
 {
+  "name": "discourse-checklist",
+  "version": "0.4.1",
+  "repository": "https://github.com/discourse/discourse-checklist",
   "author": "Discourse",
   "license": "MIT",
   "devDependencies": {
