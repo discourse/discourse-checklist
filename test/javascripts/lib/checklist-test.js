@@ -35,6 +35,24 @@ acceptance("discourse-checklist | checklist", function (needs) {
     ]);
   });
 
+  test("works if clicked in a very small interval", async function (assert) {
+    const [$elem, updated] = await prepare(`
+[ ] first
+[x] second
+[ ] third
+[ ] fourth
+[x] fifth
+[x] sixth
+    `);
+
+    $elem.find(".chcklst-box").each(() => $(this).click());
+
+    const output = await updated;
+    assert.ok(output.includes("[x] first"));
+    assert.ok(output.includes("[ ] second"));
+    assert.ok(output.includes("[x] third"));
+  });
+
   test("checkbox before a code block", async function (assert) {
     const [$elem, updated] = await prepare(`
 [ ] first
