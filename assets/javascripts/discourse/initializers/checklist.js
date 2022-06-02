@@ -19,6 +19,7 @@ export function checklistSyntax($elem, postDecorator) {
   const $boxes = $elem.find(".chcklst-box");
   const postWidget = postDecorator.widget;
   const postModel = postDecorator.getModel();
+  const removeReadonlyClass = () => $boxes.removeClass("readonly");
 
   if (!postModel.can_edit) {
     return;
@@ -32,14 +33,14 @@ export function checklistSyntax($elem, postDecorator) {
         return;
       }
 
-      $boxes.addClass('readonly');
+      $boxes.addClass("readonly");
 
       const newValue = $box.hasClass("checked") ? "[ ]" : "[x]";
 
       $box.after(iconHTML("spinner", { class: "fa-spin" })).hide();
 
-      ajax(`/posts/${postModel.id}`, { type: "GET", cache: false }).then(
-        (result) => {
+      ajax(`/posts/${postModel.id}`, { type: "GET", cache: false })
+        .then((result) => {
           const blocks = [];
 
           // Computing offsets where checkbox are not evaluated (i.e. inside
@@ -102,13 +103,17 @@ export function checklistSyntax($elem, postDecorator) {
           });
 
           if (save && save.then) {
-            save.then(() => {
-              postWidget.attrs.isSaving = false;
-              postWidget.scheduleRerender();
-            }).finally(() => $boxes.removeClass('readonly'));
+            save
+              .then(() => {
+                postWidget.attrs.isSaving = false;
+                postWidget.scheduleRerender();
+              })
+              .finally(removeReadonlyClass);
+          } else {
+            removeReadonlyClass();
           }
-        }
-      ).fail(() => $boxes.removeClass('readonly'));
+        })
+        .catch(removeReadonlyClass);
     });
   });
 
