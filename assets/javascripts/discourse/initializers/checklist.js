@@ -28,9 +28,11 @@ export function checklistSyntax($elem, postDecorator) {
     $(val).click((ev) => {
       const $box = $(ev.currentTarget);
 
-      if ($box.hasClass("permanent")) {
+      if ($box.hasClass("permanent") || $box.hasClass("readonly")) {
         return;
       }
+
+      $boxes.addClass('readonly');
 
       const newValue = $box.hasClass("checked") ? "[ ]" : "[x]";
 
@@ -103,10 +105,10 @@ export function checklistSyntax($elem, postDecorator) {
             save.then(() => {
               postWidget.attrs.isSaving = false;
               postWidget.scheduleRerender();
-            });
+            }).finally(() => $boxes.removeClass('readonly'));
           }
         }
-      );
+      ).fail(() => $boxes.removeClass('readonly'));
     });
   });
 

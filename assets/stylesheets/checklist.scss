@@ -51,6 +51,10 @@ span.chcklst-box {
       );
     }
   }
+
+  &.readonly {
+    pointer-events: none;
+  }
 }
 
 .fa-spin {
