@@ -12,8 +12,8 @@ function initializePlugin(api) {
 }
 
 function removeReadonlyClass() {
-  Array.from(document.getElementsByClassName("chcklst-box readonly")).forEach((e) =>
-    e.classList.remove("readonly")
+  Array.from(document.getElementsByClassName("chcklst-box readonly")).forEach(
+    (e) => e.classList.remove("readonly")
   );
 }
 
