@@ -11,6 +11,18 @@ function initializePlugin(api) {
   }
 }
 
+function removeReadonlyClass() {
+  Array.from(document.getElementsByClassName("chcklst-box readonly")).forEach((e) =>
+    e.classList.remove("readonly")
+  );
+}
+
+function addReadonlyClass() {
+  Array.from(document.getElementsByClassName("chcklst-box")).forEach((e) =>
+    e.classList.add("readonly")
+  );
+}
+
 export function checklistSyntax($elem, postDecorator) {
   if (!postDecorator) {
     return;
@@ -19,7 +31,6 @@ export function checklistSyntax($elem, postDecorator) {
   const $boxes = $elem.find(".chcklst-box");
   const postWidget = postDecorator.widget;
   const postModel = postDecorator.getModel();
-  const removeReadonlyClass = () => $boxes.removeClass("readonly");
 
   if (!postModel.can_edit) {
     return;
@@ -28,12 +39,13 @@ export function checklistSyntax($elem, postDecorator) {
   $boxes.each((idx, val) => {
     $(val).click((ev) => {
       const $box = $(ev.currentTarget);
+      const classList = ev.currentTarget;
 
-      if ($box.hasClass("permanent") || $box.hasClass("readonly")) {
+      if (classList.contains("permanent") || classList.contains("readonly")) {
         return;
       }
 
-      $boxes.addClass("readonly");
+      addReadonlyClass();
 
       const newValue = $box.hasClass("checked") ? "[ ]" : "[x]";
 
@@ -105,7 +117,7 @@ export function checklistSyntax($elem, postDecorator) {
           if (save && save.then) {
             save
               .then(() => {
-                postWidget.attrs.isSaving = false;
+                postWidget.attrs.set("isSaving", false);
                 postWidget.scheduleRerender();
               })
               .finally(removeReadonlyClass);
