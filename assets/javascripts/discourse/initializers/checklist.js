@@ -39,7 +39,7 @@ export function checklistSyntax($elem, postDecorator) {
   $boxes.each((idx, val) => {
     $(val).click((ev) => {
       const $box = $(ev.currentTarget);
-      const classList = ev.currentTarget;
+      const classList = ev.currentTarget.classList;
 
       if (classList.contains("permanent") || classList.contains("readonly")) {
         return;
