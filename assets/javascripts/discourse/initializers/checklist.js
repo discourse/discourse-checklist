@@ -38,10 +38,10 @@ export function checklistSyntax(elem, postDecorator) {
       }
 
       const newValue = classList.contains("checked") ? "[ ]" : "[x]";
-      const template = document.createElement('template');
+      const template = document.createElement("template");
 
       template.innerHTML = iconHTML("spinner", { class: "fa-spin" });
-      box.insertAdjacentElement('afterend', template.content.firstChild);
+      box.insertAdjacentElement("afterend", template.content.firstChild);
       box.classList.add("hidden");
       boxes.forEach((e) => e.classList.add("readonly"));
 
