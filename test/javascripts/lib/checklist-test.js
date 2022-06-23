@@ -15,7 +15,7 @@ async function prepare(raw) {
   const decoratorHelper = { getModel: () => model };
 
   const $elem = $(cooked.string);
-  checklistSyntax($elem, decoratorHelper);
+  checklistSyntax($elem[0], decoratorHelper);
 
   currentRaw = raw;
 
