@@ -7,28 +7,20 @@ function initializePlugin(api) {
   const siteSettings = api.container.lookup("site-settings:main");
 
   if (siteSettings.checklist_enabled) {
-    api.decorateCooked(checklistSyntax, { id: "checklist" });
+    api.decorateCookedElement(checklistSyntax, { id: "checklist" });
   }
 }
 
-function removeReadonlyClass() {
-  Array.from(
-    document.getElementsByClassName("chcklst-box readonly")
-  ).forEach((e) => e.classList.remove("readonly"));
+function removeReadonlyClass(boxes) {
+  boxes.forEach((e) => e.classList.remove("readonly"));
 }
 
-function addReadonlyClass() {
-  Array.from(document.getElementsByClassName("chcklst-box")).forEach((e) =>
-    e.classList.add("readonly")
-  );
-}
-
-export function checklistSyntax($elem, postDecorator) {
+export function checklistSyntax(elem, postDecorator) {
   if (!postDecorator) {
     return;
   }
 
-  const $boxes = $elem.find(".chcklst-box");
+  const boxes = [...elem.getElementsByClassName("chcklst-box")];
   const postWidget = postDecorator.widget;
   const postModel = postDecorator.getModel();
 
@@ -36,20 +28,22 @@ export function checklistSyntax($elem, postDecorator) {
     return;
   }
 
-  $boxes.each((idx, val) => {
-    $(val).click((ev) => {
-      const $box = $(ev.currentTarget);
-      const classList = ev.currentTarget.classList;
+  boxes.forEach((val, idx) => {
+    val.onclick = function (ev) {
+      const box = ev.currentTarget;
+      const classList = box.classList;
 
       if (classList.contains("permanent") || classList.contains("readonly")) {
         return;
       }
 
-      addReadonlyClass();
+      const newValue = classList.contains("checked") ? "[ ]" : "[x]";
+      const template = document.createElement('template');
 
-      const newValue = $box.hasClass("checked") ? "[ ]" : "[x]";
-
-      $box.after(iconHTML("spinner", { class: "fa-spin" })).hide();
+      template.innerHTML = iconHTML("spinner", { class: "fa-spin" });
+      box.insertAdjacentElement('afterend', template.content.firstChild);
+      box.classList.add("hidden");
+      boxes.forEach((e) => e.classList.add("readonly"));
 
       ajax(`/posts/${postModel.id}`, { type: "GET", cache: false })
         .then((result) => {
@@ -117,20 +111,17 @@ export function checklistSyntax($elem, postDecorator) {
           if (save && save.then) {
             save
               .then(() => {
-                postWidget.attrs.set("isSaving", false);
+                postWidget.attrs.isSaving = false;
                 postWidget.scheduleRerender();
               })
-              .finally(removeReadonlyClass);
+              .finally(() => removeReadonlyClass(boxes));
           } else {
-            removeReadonlyClass();
+            removeReadonlyClass(boxes);
           }
         })
-        .catch(removeReadonlyClass);
-    });
+        .catch(() => removeReadonlyClass(boxes));
+    };
   });
-
-  // confirm the feature is enabled by showing the click-ability
-  $boxes.css({ cursor: "pointer" });
 }
 
 export default {
