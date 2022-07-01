@@ -14,8 +14,8 @@ async function prepare(raw) {
   const model = Post.create({ id: 42, can_edit: true });
   const decoratorHelper = { getModel: () => model };
 
-  const $elem = $(cooked.string);
-  checklistSyntax($elem, decoratorHelper);
+  const $elem = $(`<div>${cooked.string}</div>`);
+  checklistSyntax($elem[0], decoratorHelper);
 
   currentRaw = raw;
 
@@ -33,6 +33,23 @@ acceptance("discourse-checklist | checklist", function (needs) {
       { "Content-Type": "application/json" },
       { raw: currentRaw },
     ]);
+  });
+
+  test("make checkboxes readonly while updating", async function (assert) {
+    const [$elem, updated] = await prepare(`
+[ ] first
+[x] second
+    `);
+
+    const $checklist = $elem.find(".chcklst-box");
+    $checklist.get(0).click();
+    const checkbox = $checklist.get(1);
+    assert.ok(checkbox.classList.contains("readonly"));
+    checkbox.click();
+
+    const output = await updated;
+    assert.ok(output.includes("[x] first"));
+    assert.ok(output.includes("[x] second"));
   });
 
   test("checkbox before a code block", async function (assert) {
