@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe PrettyText do
 
-  context 'markdown it' do
+  describe 'markdown it' do
     it 'can properly bake boxes' do
       md = <<~MD
         [],[ ],[x],[X] are all checkboxes
