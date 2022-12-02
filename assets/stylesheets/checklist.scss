@@ -63,6 +63,16 @@ span.chcklst-box {
   }
 }
 
+ul li.has-checkbox {
+  list-style-type: none;
+  position: relative;
+
+  .list-item-checkbox {
+    position: absolute;
+    left: -1.2em;
+  }
+}
+
 .fa-spin {
   display: inline-block;
   vertical-align: middle;
