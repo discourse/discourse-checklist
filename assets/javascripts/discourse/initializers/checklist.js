@@ -15,12 +15,50 @@ function removeReadonlyClass(boxes) {
   boxes.forEach((e) => e.classList.remove("readonly"));
 }
 
+function isWhitespaceNode(node) {
+  return node.nodeType === 3 && node.nodeValue.match(/^\s*$/);
+}
+
+function hasPrecedingContent(node) {
+  let sibling = node.previousSibling;
+  while (sibling) {
+    if (!isWhitespaceNode(sibling)) {
+      return true;
+    }
+    sibling = sibling.previousSibling;
+  }
+  return false;
+}
+
+function addUlClasses(boxes) {
+  boxes.forEach((val) => {
+    let parent = val.parentElement;
+    if (
+      parent.nodeName === "P" &&
+      parent.parentElement.firstElementChild === parent
+    ) {
+      parent = parent.parentElement;
+    }
+    if (parent.nodeName === "LI" && parent.parentElement.nodeName === "UL") {
+      if (!hasPrecedingContent(val)) {
+        parent.classList.add("has-checkbox");
+        val.classList.add("list-item-checkbox");
+        if (!val.nextSibling) {
+          val.insertAdjacentHTML("afterend", "&#8203;"); // Ensure otherwise empty <li> does not collapse height
+        }
+      }
+    }
+  });
+}
+
 export function checklistSyntax(elem, postDecorator) {
+  const boxes = [...elem.getElementsByClassName("chcklst-box")];
+  addUlClasses(boxes);
+
   if (!postDecorator) {
     return;
   }
 
-  const boxes = [...elem.getElementsByClassName("chcklst-box")];
   const postWidget = postDecorator.widget;
   const postModel = postDecorator.getModel();
 

@@ -189,4 +189,63 @@ Actual checkboxes:
     const output = await updated;
     assert.ok(output.includes("[ ] fourth"));
   });
+
+  test("rendering in bullet lists", async function (assert) {
+    const [$elem] = await prepare(`
+- [ ] LI 1
+- LI 2 [ ] with checkbox in middle
+- [ ] LI 3
+
+1. [ ] Ordered LI with checkbox
+    `);
+    const elem = $elem[0];
+
+    const listItems = [...elem.querySelector("ul").children];
+    assert.equal(listItems.length, 3);
+
+    assert.true(
+      listItems[0].classList.contains("has-checkbox"),
+      "LI 1 has `.has-checkbox` class"
+    );
+    assert.true(
+      listItems[0]
+        .querySelector(".chcklst-box")
+        .classList.contains("list-item-checkbox"),
+      "LI 1 checkbox has `.list-item-checkbox`"
+    );
+
+    assert.false(
+      listItems[1].classList.contains("has-checkbox"),
+      "LI 2 does not have `.has-checkbox` class"
+    );
+    assert.false(
+      listItems[1]
+        .querySelector(".chcklst-box")
+        .classList.contains("list-item-checkbox"),
+      "LI 2 checkbox does not have `.list-item-checkbox`"
+    );
+
+    assert.true(
+      listItems[2].classList.contains("has-checkbox"),
+      "LI 3 has `.has-checkbox` class"
+    );
+    assert.true(
+      listItems[2]
+        .querySelector(".chcklst-box")
+        .classList.contains("list-item-checkbox"),
+      "LI 3 checkbox has `.list-item-checkbox`"
+    );
+
+    const orderedListItems = [...elem.querySelector("ol").children];
+    assert.false(
+      orderedListItems[0].classList.contains("has-checkbox"),
+      "OL does not have `.has-checkbox` class"
+    );
+    assert.false(
+      orderedListItems[0]
+        .querySelector(".chcklst-box")
+        .classList.contains("list-item-checkbox"),
+      "OL checkbox does not have `.list-item-checkbox`"
+    );
+  });
 });
