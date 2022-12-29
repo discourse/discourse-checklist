@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 describe PrettyText do
-
-  describe 'markdown it' do
-    it 'can properly bake boxes' do
+  describe "markdown it" do
+    it "can properly bake boxes" do
       md = <<~MD
         [],[ ],[x],[X] are all checkboxes
         `[ ]` [x](hello) *[ ]* **[ ]** _[ ]_ __[ ]__ ~~[ ]~~ are not checkboxes
