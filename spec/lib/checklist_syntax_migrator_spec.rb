@@ -1,15 +1,11 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 describe ChecklistSyntaxMigrator do
-  before do
-    SiteSetting.allow_uncategorized_topics = true
-  end
+  before { SiteSetting.allow_uncategorized_topics = true }
   let(:topic) { Fabricate(:topic) }
-  let(:post_args) do
-    { user: topic.user, topic: topic }
-  end
+  let(:post_args) { { user: topic.user, topic: topic } }
 
   def post_with_body(body)
     args = post_args.merge(raw: body)
@@ -72,7 +68,7 @@ describe ChecklistSyntaxMigrator do
       "[\*] That will",
       "```",
       "[\*] Again this won't",
-      "```"
+      "```",
     ].join("\n")
     post = post_with_body(body)
 
@@ -85,7 +81,7 @@ describe ChecklistSyntaxMigrator do
       "[x] That will",
       "```",
       "[\*] Again this won't",
-      "```"
+      "```",
     ].join("\n")
     expect(post.reload.raw).to eq(expected)
   end
@@ -98,7 +94,7 @@ describe ChecklistSyntaxMigrator do
       "[\*] That will",
       '[quote="markvanlan, post:11, topic:10"]',
       "[\*] Again this won't",
-      "[/quote]"
+      "[/quote]",
     ].join("\n")
     post = post_with_body(body)
 
@@ -111,7 +107,7 @@ describe ChecklistSyntaxMigrator do
       "[x] That will",
       '[quote="markvanlan, post:11, topic:10"]',
       "[\*] Again this won't",
-      "[/quote]"
+      "[/quote]",
     ].join("\n")
     expect(post.reload.raw).to eq(expected)
   end
