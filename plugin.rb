@@ -7,12 +7,8 @@
 # url: https://github.com/discourse/discourse-checklist
 # transpile_js: true
 
-enabled_site_setting :checklist_enabled
-
-register_asset "stylesheets/checklist.scss"
-
-register_svg_icon "spinner" if respond_to?(:register_svg_icon)
-
-after_initialize do
-  ["../lib/checklist_syntax_migrator.rb"].each { |path| load File.expand_path(path, __FILE__) }
+AdminDashboardData.add_problem_check do
+  I18n.t(
+    "The discourse-checklist plugin has been integrated into discourse core. Please remove the plugin from your app.yml and rebuild your container.",
+  )
 end
